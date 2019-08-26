@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Image } from 'react-native'
 import { observable, toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { TouchableWithoutFeedback, TouchableOpacity, ScrollView } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { createStackNavigator } from 'react-navigation'
 import { Slider } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -17,8 +17,10 @@ import ManageActivity from './ManageActivity'
 import AddActivity from './AddActivity'
 import ManageRelation from './ManageRelation'
 import AddRelation from './AddRelation'
-import { getDayName, getMonthName } from '../../utils/date'
+import { getMonthName } from '../../utils/date'
 import { capitalize } from '../../utils/text'
+
+import AdditionalLog from './AdditionalLog'
 
 @observer
 class AddLog extends Component {
@@ -47,7 +49,7 @@ class AddLog extends Component {
       ),
       headerRight: (
         <TouchableOpacity
-          onPress={() => navigation.navigate('AdditionalLog')}
+          onPress={navigation.getParam('_next')}
           style={{
             padding: 8
           }}
@@ -63,6 +65,7 @@ class AddLog extends Component {
     this._key = this.props.navigation.getParam('key')
 
     this.setMood = this.setMood.bind(this)
+    this._next = this._next.bind(this)
     this._currentDate = new Date(Date.parse(this._key))
     logStore.inputLog.mood = moodStore.getMoodByIndex(Math.round(this._sliderValue))
     logStore.inputLog.date = this._currentDate.getDate()
@@ -76,6 +79,21 @@ class AddLog extends Component {
       logStore.inputLog = dataExist
       this._sliderValue = dataExist.mood.value
     }
+    else {
+      logStore.clearInputLog()
+    }
+
+    this.props.navigation.setParams({ 
+			_next: this._next
+		})
+  }
+
+  _next() {
+    const [year, month, date] = this._key.split('-')
+    logStore.inputLog.year = year
+    logStore.inputLog.month = month
+    logStore.inputLog.date = date
+    this.props.navigation.navigate('AdditionalLog')
   }
   
 	async setMood(val) {
@@ -117,7 +135,7 @@ class AddLog extends Component {
             fontFamily: 'Inter-Regular',
             letterSpacing: -.3,
             color: '#2E2E2E'
-          }}>{logStore.inputLog.mood.name}</Text>
+          }}>{capitalize(logStore.inputLog.mood.name)}</Text>
         </View>
         <View style={{
           alignItems: 'center',
@@ -131,9 +149,6 @@ class AddLog extends Component {
           }} />
         </View>
         <Slider
-          // style={{
-          //   width: '100%'
-          // }}
           thumbStyle={{
             width: 40,
             height: 40,
@@ -145,218 +160,6 @@ class AddLog extends Component {
           onValueChange={val => this.setMood(val)}
         />
       </View>
-    )
-  }
-}
-
-@observer
-class AdditionalLog extends Component {
-  constructor(prop) {
-    super(prop)
-    this._saveLog = this._saveLog.bind(this)
-  }
-
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerLeft: (
-        <TouchableOpacity
-          onPress={() => navigation.navigate('AddLog')}
-          style={{
-            padding: 8,
-            alignItems: 'flex-start'
-          }}
-        >
-          <Icon size={28} name="chevron-left" />
-        </TouchableOpacity>
-      ),
-      headerTitle: (
-        <View style={{
-          flex: 1,
-          alignItems: 'center'
-        }}>
-          <Text style={{
-            fontFamily: "Inter-Bold",
-            fontSize: 18,
-            letterSpacing: -0.5
-          }}>Add Log</Text>
-        </View>
-      ),
-      headerRight: (
-        <TouchableOpacity
-        onPress={navigation.getParam('_saveLog')}
-          style={{
-            padding: 8
-          }}
-        >
-          <Icon size={28} name="check" />
-        </TouchableOpacity>
-      ),
-    }
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({
-      _saveLog: this._saveLog
-    })
-  }
-
-  async _saveLog() {
-    await logStore.saveLog()
-    this.props.navigation.navigate('Tabs')
-  }
-
-  async _addActivity(item) {
-    const itemIdx = logStore.inputLog.activityList.findIndex((el) => el.id === item.id)
-    if(itemIdx > -1) {
-      logStore.inputLog.activityList.splice(itemIdx, 1)
-    }
-    else {
-      logStore.inputLog.activityList.push(item)
-    }
-  }
-
-  async _addRelation(item) {
-    const itemIdx = logStore.inputLog.relationList.findIndex((el) => el.id === item.id)
-    if(itemIdx > -1) {
-      logStore.inputLog.relationList.splice(itemIdx, 1)
-    }
-    else {
-      logStore.inputLog.relationList.push(item)
-    }
-  }
-
-  render() {
-    return (
-      <ScrollView style={{
-        paddingHorizontal: 16,
-        paddingVertical: 16
-      }}>
-        <View style={{
-          alignItems: 'center',
-          paddingBottom: 28
-        }}>
-          <Text style={{
-            fontFamily: 'Inter-Medium',
-            fontSize: 16
-          }}>Feeling</Text>
-          <Text style={{
-            fontFamily: 'Inter-Bold',
-            fontSize: 16
-          }}>{logStore.inputLog.mood.name}</Text>
-        </View>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-          <View style={{
-            alignItems: 'center',
-            paddingBottom: 8
-          }}>
-            <Text style={{
-              fontSize: 16,
-              fontFamily: 'Inter-Bold',
-              letterSpacing: -.5
-            }}>What have you been up to?</Text>
-          </View>
-          <TouchableOpacity style={{
-            alignItems: 'center',
-          }} onPress={() => this.props.navigation.navigate('ManageActivity')}>
-            <Icon style={{
-              position: 'relative',
-              top: '-50%'
-            }} name="settings-helper" size={30} />
-          </TouchableOpacity>
-        </View>
-        <View style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          paddingBottom: 16
-        }}>
-          {
-            activityStore.list.map((item, idx) => {
-              const isActive = logStore.inputLog.activityList.findIndex((el) => el.id === item.id) > -1 ? true : false
-              return (
-                <View style={{
-                  width: '25%',
-                  paddingVertical: 12
-                }} key={item.id}>
-                  <TouchableWithoutFeedback
-                    onPress={() => this._addActivity(item)}
-                  >
-                    <View style={{
-                      alignItems: 'center',
-                      opacity: isActive ? 1 : 0.4
-                    }}>
-                      <Icon name={item.icon} size={24} />
-                      <Text style={{
-                        fontFamily: 'Inter-Medium',
-                        fontSize: 12,
-                        letterSpacing: -.3
-                      }} ellipsizeMode='tail' numberOfLines={1}>{ item.name }</Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              )
-            })
-          }
-        </View>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-          <View style={{
-            alignItems: 'center',
-            paddingBottom: 8
-          }}>
-            <Text style={{
-              fontSize: 16,
-              fontFamily: 'Inter-Bold',
-              letterSpacing: -.5
-            }}>Who are you with?</Text>
-          </View>
-          <TouchableOpacity style={{
-            alignItems: 'center',
-          }} onPress={() => this.props.navigation.navigate('ManageRelation')}>
-            <Icon style={{
-              position: 'relative',
-              top: '-50%'
-            }} name="settings-helper" size={30} />
-          </TouchableOpacity>
-        </View>
-        <View style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          paddingBottom: 16
-        }}>
-          {
-            relationStore.list.map((item) => {
-              const isActive = logStore.inputLog.relationList.findIndex((el) => el.id === item.id) > -1 ? true : false
-              return (
-                <View style={{
-                  width: '25%',
-                  paddingVertical: 12
-                }} key={item.id}>
-                  <TouchableWithoutFeedback
-                    onPress={() => this._addRelation(item)}
-                  >
-                    <View style={{
-                      alignItems: 'center',
-                      opacity: isActive ? 1 : 0.4
-                    }}>
-                      <Icon name={item.icon} size={24} />
-                      <Text style={{
-                        fontFamily: 'Inter-Medium',
-                        fontSize: 12,
-                        letterSpacing: -.3
-                      }} ellipsizeMode='tail' numberOfLines={1}>{ item.name }</Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              )
-            })
-          }
-        </View>
-      </ScrollView>
     )
   }
 }

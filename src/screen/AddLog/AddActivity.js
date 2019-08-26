@@ -94,7 +94,7 @@ class AddActivity extends Component {
 	componentDidMount() {
 		this.props.navigation.setParams({ 
 			_addActivity: this._addActivity
-		 })
+		})
 	}
 
 	async _addActivity() {

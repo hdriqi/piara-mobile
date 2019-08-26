@@ -111,7 +111,10 @@ class LogStore {
 
   constructor() {
     this._defaultInputLog = {
-      mood: {},
+      mood: {
+        name: 'okay',
+        value: 2
+      },
       relationList: [],
       activityList: [],
       date: null,
@@ -131,7 +134,12 @@ class LogStore {
     } catch (err) {
       
     }
-	}
+  }
+  
+  @action
+  async clearInputLog() {
+    this.inputLog = this._defaultInputLog
+  }
 
   @action
   async saveLog() {
@@ -139,7 +147,7 @@ class LogStore {
     const data = this.inputLog
     const key = `${data.year}-${data.month}-${data.date}`
     const dataExist = this.list.findIndex((el) => el.key === key)
-    console.log(data)
+    console.log(toJS(data))
     if(dataExist > -1) {
       this.list[dataExist] = {
         id,
@@ -156,7 +164,6 @@ class LogStore {
     }
     
     await AsyncStorage.setItem(`my-log`, JSON.stringify(this.list))
-    this.inputLog = this._defaultInputLog
   }
 
   setActiveLog(key) {
