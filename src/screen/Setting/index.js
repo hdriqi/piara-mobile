@@ -49,7 +49,6 @@ export class SettingScreen extends Component {
 			currentDate++
 		}
 		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate}T${selectedHour}:${selectedMinute}:00`
-		console.log(`scheduled on ${new Date(Date.parse(scheduleTime))}`)
 		PushNotification.cancelAllLocalNotifications()
 		PushNotification.localNotificationSchedule({
 			title: "Cariin titel yang bagus", // (optional)

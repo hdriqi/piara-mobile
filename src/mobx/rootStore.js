@@ -35,7 +35,7 @@ class RootStore {
 			this.userSetting = {
 				pin: '',
 				selectedCompanion: 'cat',
-				reminder: true,
+				reminder: false,
 				reminderTime: {
 					hour: `20`,
 					minute: `00`,
