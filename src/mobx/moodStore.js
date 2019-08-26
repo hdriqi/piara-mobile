@@ -9,19 +9,19 @@ import uid from '../utils/uid'
 class MoodStore {
   @observable list = [
 		{
-			name: 'Terrible',
+			name: 'terrible',
 		},
 		{
-			name: 'Sad',
+			name: 'sad',
 		},
 		{
-			name: 'Okay',
+			name: 'okay',
 		},
 		{
-			name: 'Happy',
+			name: 'happy',
 		},
 		{
-			name: 'Excited'
+			name: 'excited'
 		}
 	]
 
