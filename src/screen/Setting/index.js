@@ -38,7 +38,28 @@ export class SettingScreen extends Component {
         </View>
       )
     }
-  }
+	}
+	
+	async _scheduleReminder(selectedHour, selectedMinute) {
+		const currentTime = new Date()
+		let currentYear = currentTime.getFullYear()
+		let currentMonth = currentTime.getMonth() + 1
+		let currentDate = currentTime.getDate()
+		if(currentTime.getHours() >= selectedHour && currentTime.getMinutes() > selectedMinute) {
+			currentDate++
+		}
+		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate}T${selectedHour}:${selectedMinute}:00`
+		console.log(`scheduled on ${new Date(Date.parse(scheduleTime))}`)
+		PushNotification.cancelAllLocalNotifications()
+		PushNotification.localNotificationSchedule({
+			title: "Cariin titel yang bagus", // (optional)
+			message: "Cariin tulisan yang bagus untuk isi", // (required)
+			date: new Date(Date.parse(scheduleTime)),
+			repeatType: 'day',
+			playSound: true,
+			soundName: 'default',
+		})
+	}
 
 	async _init() {
 		this._switchState = rootStore.userSetting.pin && rootStore.userSetting.pin.length > 0 ? true : false
@@ -60,31 +81,24 @@ export class SettingScreen extends Component {
 					minute: selectedMinute
 				})
 
-				const currentTime = new Date()
-				let currentYear = currentTime.getFullYear()
-				let currentMonth = currentTime.getMonth() + 1
-				let currentDate = currentTime.getDate()
-				if(currentTime.getHours() >= selectedHour && currentTime.getMinutes() > selectedMinute) {
-					currentDate++
+				if(this._switchReminder) {
+					this._scheduleReminder(selectedHour, selectedMinute)
 				}
-				const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate}T${selectedHour}:${selectedMinute}:00`
-				PushNotification.cancelAllLocalNotifications()
-				PushNotification.localNotificationSchedule({
-					title: "Cariin titel yang bagus", // (optional)
-					message: "Cariin tulisan yang bagus untuk isi", // (required)
-					date: new Date(Date.parse(scheduleTime)),
-					repeatType: 'day',
-					playSound: true,
-					soundName: 'default',
-				})
 			}
 		})
 	}
 
 	async _switchReminderOnPress(val) {
 		this._switchReminder = val
-		PushNotification.cancelAllLocalNotifications()
 		await rootStore.setReminder(val)
+		if(val) {
+			const selectedHour = rootStore.userSetting.reminderTime.hour
+			const selectedMinute = rootStore.userSetting.reminderTime.minute
+			this._scheduleReminder(selectedHour, selectedMinute)
+		}
+		else {
+			PushNotification.cancelAllLocalNotifications()
+		}
 	}
 	
 	switchOnPress(val) {

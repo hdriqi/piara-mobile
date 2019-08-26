@@ -23,15 +23,6 @@ class RootStore {
 		}
 	]
 
-	// defaultSetting
-	// {
-	// 	pin: '',
-	// 	reminder: {
-	// 		hour: 20,
-	// 		minute: 00,
-	// 	}		
-	// }
-
 	@action
 	async fetchInitialSetting() {
 		const setting = await AsyncStorage.getItem('userSetting')
@@ -43,12 +34,14 @@ class RootStore {
 		} catch (err) {
 			this.userSetting = {
 				pin: '',
+				selectedCompanion: 'cat',
 				reminder: true,
 				reminderTime: {
 					hour: `20`,
 					minute: `00`,
 				}
 			}
+			await AsyncStorage.setItem('userSetting', JSON.stringify(this.userSetting))
 		}
 
 		const cat = await AsyncStorage.getItem('companion-cat')
@@ -61,6 +54,7 @@ class RootStore {
 			const response = await fetch('https://jsonstorage.net/api/items/59cf78fd-2561-417e-828b-239ee0685859')
 			const cat = await response.json()
 			this.companion.cat = cat
+			await AsyncStorage.setItem('companion-cat', JSON.stringify(this.companion.cat))
 		}
 	}
 
