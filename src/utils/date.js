@@ -24,7 +24,7 @@ const getDayName = (day, month, year) => {
  * @param {Int} year 
  */
 const getTotalDaysInMonth = (month, year) => {
-	return new Date(year, month + 1, 0).getDate()
+	return new Date(year, month, 0).getDate()
 }
 
 const _monthDiff = (month, year) => {

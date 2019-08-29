@@ -21,7 +21,7 @@ class Home extends Component {
 	@observable _selectedYear = new Date().getFullYear()
 
 	@computed get _selectedMonthDayList() {
-		return [...Array(getTotalDaysInMonth(this._selectedMonth, this._selectedYear)).keys()].map((idx) => {
+		return [...Array(getTotalDaysInMonth(this._selectedMonth + 1, this._selectedYear)).keys()].map((idx) => {
 			return {
 				dayName: getDayName(idx+1, this._selectedMonth, this._selectedYear),
 				dayDate: idx + 1
@@ -61,6 +61,11 @@ class Home extends Component {
 		})
 	}
 
+	_showMonthPicker() {
+		this._initPicker()
+		Picker.show()
+	}
+
 	async _onScrollChange(index) {
 		const activeKey = `${this._selectedYear}-${this._selectedMonth+1}-${index+1}`
 		if(activeKey !== this._activeKey) {
@@ -75,16 +80,11 @@ class Home extends Component {
 			<View style={{ 
 				flex: 1
 			}}>
-				<NavigationEvents
-          onWillFocus={payload => {
-            this._initPicker()
-          }}
-        />
 				<View style={{
 					flex: 1
 				}}>
 					<TouchableOpacity
-						onPress={() => Picker.show()}
+						onPress={() => this._showMonthPicker()}
 						style={{
 							height: '100%',
 							alignItems: 'center'

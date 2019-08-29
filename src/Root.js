@@ -9,6 +9,7 @@ import RNBlockstackSdk from "react-native-blockstack"
 
 import HomeScreen from './screen/Home'
 import AddLogNavigator from './screen/AddLog'
+import AnalyticsNavigator from './screen/Analytics'
 import SettingNavigator from './screen/Setting'
 
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
@@ -151,7 +152,7 @@ class SignInScreen extends Component {
 
 const TabsNavigator = createBottomTabNavigator({
   Home: HomeScreen,
-  Analytics: SettingNavigator,
+  Analytics: AnalyticsNavigator,
   Settings: SettingNavigator,
 }, {
   tabBarOptions: {

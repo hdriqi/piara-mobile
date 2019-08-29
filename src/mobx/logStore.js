@@ -1,104 +1,9 @@
 import { observable, toJS, action } from 'mobx'
 import uid from '../utils/uid'
-import AsyncStorage from '@react-native-community/async-storage';
-
-// schema
-// id: String
-// key: String
-// mood: Mood
-// activityList: [Activity]
-// relationList: [Relation]
-// day: Number
-// month: Number
-// year: Number
+import AsyncStorage from '@react-native-community/async-storage'
 
 class LogStore {
-  @observable list = [
-    {
-      id: '123123123',
-      key: '2019-8-17',
-      mood: {
-        name: 'Okay'
-      },
-      activityList: [
-        {
-          name: 'Work',
-          icon: 'worker'
-        },
-        {
-          name: 'Competition',
-          icon: 'trophy'
-        },
-        {
-          name: 'Gaming',
-          icon: 'controller-classic'
-        },
-        {
-          name: 'Movie',
-          icon: 'movie'
-        },
-      ],
-      day: 17,
-      month: 8,
-      year: 2019
-    },
-    {
-      id: '123123123',
-      key: '2019-8-18',
-      mood: {
-        name: 'Terrible'
-      },
-      activityList: [
-        {
-          name: 'Work',
-          icon: 'worker'
-        },
-        {
-          name: 'Competition',
-          icon: 'trophy'
-        },
-        {
-          name: 'Work',
-          icon: 'worker'
-        },
-        {
-          name: 'Competition',
-          icon: 'trophy'
-        },
-      ],
-      day: 18,
-      month: 8,
-      year: 2019
-    },
-    {
-      id: '123123123',
-      key: '2019-8-16',
-      mood: {
-        name: 'Excited'
-      },
-      activityList: [
-        {
-          name: 'Work',
-          icon: 'worker'
-        },
-        {
-          name: 'Competition',
-          icon: 'trophy'
-        },
-        {
-          name: 'Work',
-          icon: 'worker'
-        },
-        {
-          name: 'Competition',
-          icon: 'trophy'
-        },
-      ],
-      day: 16,
-      month: 8,
-      year: 2019
-    }
-  ]
+  @observable list = []
   @observable activeLog = null
   @observable inputLog = {
     mood: {},
@@ -132,7 +37,7 @@ class LogStore {
         this.list = parsedCurrentList
       } 
     } catch (err) {
-      
+      this.list = []
     }
   }
   

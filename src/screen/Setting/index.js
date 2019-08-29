@@ -51,8 +51,8 @@ export class SettingScreen extends Component {
 		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate}T${selectedHour}:${selectedMinute}:00`
 		PushNotification.cancelAllLocalNotifications()
 		PushNotification.localNotificationSchedule({
-			title: "Cariin titel yang bagus", // (optional)
-			message: "Cariin tulisan yang bagus untuk isi", // (required)
+			title: "How's Your Day?", // (optional)
+			message: "Fill your daily mood to understand yourself and reflect your emotional state", // (required)
 			date: new Date(Date.parse(scheduleTime)),
 			repeatType: 'day',
 			playSound: true,
