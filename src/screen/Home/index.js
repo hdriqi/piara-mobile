@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Button, Image } from 'react-native'
 import Picker from 'react-native-picker'
 import { observer } from 'mobx-react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import Swiper from '../../components/Swiper'
@@ -32,8 +32,10 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 
+		this._currentTime = new Date().getTime()
 		this._currentMonth = new Date().getMonth()
 		this._firstItem = new Date().getDate() - 1
+		this._activeTime = null
 		this._pickerData = []
 		this._swiperItemWidth = 56
 		this._initPicker = this._initPicker.bind(this)
@@ -56,6 +58,7 @@ class Home extends Component {
 					self._selectedMonth = getMonthIdx(month)
 					self._selectedYear = year
 					self._firstItem = self._currentMonth > self._selectedMonth ? getTotalDaysInMonth(self._selectedMonth, year) - 1 : new Date().getDate() - 1
+					self._activeKey = `${self._selectedYear}-${self._selectedMonth+1}-${self._firstItem+1}`
 				})
 			}
 		})
@@ -68,6 +71,7 @@ class Home extends Component {
 
 	async _onScrollChange(index) {
 		const activeKey = `${this._selectedYear}-${this._selectedMonth+1}-${index+1}`
+		this._activeTime = new Date(Date.parse(activeKey)).getTime()
 		if(activeKey !== this._activeKey) {
 			this._activeKey = activeKey
 		}
@@ -203,7 +207,7 @@ class Home extends Component {
 															// backgroundColor: '#F8F8F8',
 															borderRadius: 8,
 															marginBottom: 8,
-														}}>
+														}} key={activity.id}>
 															<View style={{
 																paddingRight: 4
 															}}>
@@ -228,7 +232,7 @@ class Home extends Component {
 											paddingHorizontal: 16
 										}}>
 											{
-												Array.isArray(activeLog.relationList) && activeLog.relationList.map((activity) => {
+												Array.isArray(activeLog.relationList) && activeLog.relationList.map((relation) => {
 													return (
 														<View style={{
 															alignItems: 'center',
@@ -238,17 +242,17 @@ class Home extends Component {
 															// backgroundColor: '#F8F8F8',
 															borderRadius: 8,
 															marginBottom: 8
-														}}>
+														}} key={relation.id}>
 															<View style={{
 																paddingRight: 4
 															}}>
-																<Icon name={activity.icon} size={16} />
+																<Icon name={relation.icon} size={16} />
 															</View>
 															<View>
 																<Text style={{
 																	fontSize: 16,
 																	fontFamily: 'Inter-Regular'
-																}}>{activity.name}</Text>
+																}}>{relation.name}</Text>
 															</View>
 														</View>
 													)
@@ -276,9 +280,66 @@ class Home extends Component {
 									</View>
 								</View>
 							) : (
-								<Button title="Add Log" onPress={() => this.props.navigation.navigate('AddLog', {
-									key: this._activeKey
-								})}/>
+								<View style={{
+									flex: 1
+								}}>
+									<View style={{
+										flex: 6,
+										alignItems: 'center',
+										justifyContent: 'center',
+										padding: 16
+									}}>
+										<Image style={{
+											width: 300,
+											height: 300
+										}} source={{
+											uri: this._currentTime > this._activeTime ? rootStore.asset.image.addLog : rootStore.asset.image.disableAddLog
+										}} />
+									</View>
+									<View style={{
+										flex: 6,
+										alignItems: 'center',
+										paddingHorizontal: 16
+									}}>
+										{
+											this._currentTime > this._activeTime ? (
+												<TouchableWithoutFeedback
+													onPress={() => this.props.navigation.navigate('AddLog', {
+														key: this._activeKey
+													})}
+												>
+													<Text style={{
+														fontFamily: 'Inter-SemiBold',
+														fontSize: 24,
+														textAlign: 'center',
+														color: '#7DABC9'
+													}}>Add Mood</Text>
+													<Text style={{
+														fontFamily: 'Inter-Regular',
+														fontSize: 16,
+														textAlign: 'center',
+														color: `#777777`
+													}}>Fill your daily mood to understand yourself and reflect your emotional state</Text>
+												</TouchableWithoutFeedback>
+											) : (
+												<TouchableWithoutFeedback>
+													<Text style={{
+														fontFamily: 'Inter-SemiBold',
+														fontSize: 24,
+														textAlign: 'center',
+														color: '#E49292'
+													}}>Not Yet</Text>
+													<Text style={{
+														fontFamily: 'Inter-Regular',
+														fontSize: 16,
+														textAlign: 'center',
+														color: `#777777`
+													}}>This day is yet to come, you can only track today or past day</Text>
+												</TouchableWithoutFeedback>
+											)
+										}
+									</View>
+								</View>
 							)
 						}
 					</View>
