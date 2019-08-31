@@ -12,7 +12,6 @@ import rootStore from '../../mobx/rootStore'
 import { observable, computed, transaction } from 'mobx'
 import { getTotalDaysInMonth, getDayName, getPickerData, getMonthName, getMonthIdx } from '../../utils/date'
 import { capitalize } from '../../utils/text'
-import { NavigationEvents } from 'react-navigation';
 
 @observer
 class Home extends Component {
@@ -20,7 +19,8 @@ class Home extends Component {
 	@observable _selectedMonth = new Date().getMonth()
 	@observable _selectedYear = new Date().getFullYear()
 
-	@computed get _selectedMonthDayList() {
+	@computed 
+	get _selectedMonthDayList() {
 		return [...Array(getTotalDaysInMonth(this._selectedMonth + 1, this._selectedYear)).keys()].map((idx) => {
 			return {
 				dayName: getDayName(idx+1, this._selectedMonth, this._selectedYear),
@@ -29,13 +29,17 @@ class Home extends Component {
 		})
 	}
 
+	@computed
+	get _activeTime() {
+		return this._activeKey && new Date(Date.parse(this._activeKey)).getTime() || null
+	}
+
 	constructor(props) {
 		super(props)
 
 		this._currentTime = new Date().getTime()
 		this._currentMonth = new Date().getMonth()
 		this._firstItem = new Date().getDate() - 1
-		this._activeTime = null
 		this._pickerData = []
 		this._swiperItemWidth = 56
 		this._initPicker = this._initPicker.bind(this)
@@ -59,6 +63,7 @@ class Home extends Component {
 					self._selectedYear = year
 					self._firstItem = self._currentMonth > self._selectedMonth ? getTotalDaysInMonth(self._selectedMonth, year) - 1 : new Date().getDate() - 1
 					self._activeKey = `${self._selectedYear}-${self._selectedMonth+1}-${self._firstItem+1}`
+					// self._activeTime = new Date(Date.parse(activeKey)).getTime()
 				})
 			}
 		})
@@ -71,7 +76,7 @@ class Home extends Component {
 
 	async _onScrollChange(index) {
 		const activeKey = `${this._selectedYear}-${this._selectedMonth+1}-${index+1}`
-		this._activeTime = new Date(Date.parse(activeKey)).getTime()
+		// this._activeTime = new Date(Date.parse(activeKey)).getTime()
 		if(activeKey !== this._activeKey) {
 			this._activeKey = activeKey
 		}
@@ -182,7 +187,7 @@ class Home extends Component {
 												<Text style={{
 													fontFamily: 'Inter-SemiBold',
 													fontSize: 18
-												}}> {activeLog.mood.name}</Text>
+												}}> {capitalize(activeLog.mood.name)}</Text>
 											</Text>
 										</View>
 									</View>
@@ -318,7 +323,8 @@ class Home extends Component {
 														fontFamily: 'Inter-Regular',
 														fontSize: 16,
 														textAlign: 'center',
-														color: `#777777`
+														color: `#777777`,
+														letterSpacing: -0.5
 													}}>Fill your daily mood to understand yourself and reflect your emotional state</Text>
 												</TouchableWithoutFeedback>
 											) : (
@@ -333,8 +339,9 @@ class Home extends Component {
 														fontFamily: 'Inter-Regular',
 														fontSize: 16,
 														textAlign: 'center',
-														color: `#777777`
-													}}>This day is yet to come, you can only track today or past day</Text>
+														color: `#777777`,
+														letterSpacing: -0.5
+													}}>This day is not started yet, you can only track today or past day</Text>
 												</TouchableWithoutFeedback>
 											)
 										}
