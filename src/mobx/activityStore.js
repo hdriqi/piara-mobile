@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 // iconURI: String
 
 class ActivityStore {
+	@observable defaultList = [{"id":"jzyxcfnq","name":"Work","icon":"briefcase"},{"id":"jzyxdh3g","name":"Movie","icon":"movie"},{"id":"jzyxdma1","name":"Music","icon":"music"},{"id":"jzyxdzef","name":"Good Meal","icon":"silverware"},{"id":"jzyxezlf","name":"Commute","icon":"bus"},{"id":"jzyxflo8","name":"Cook","icon":"stove"},{"id":"jzyxgf5a","name":"Sleep Well","icon":"bed-empty"}]
   @observable list = []
   @observable index = {
 		id: {}
@@ -17,8 +18,11 @@ class ActivityStore {
 	async fetchInitialActivity() {
 		const currentList = await AsyncStorage.getItem('my-activity')
 		const parsedCurrentList = JSON.parse(currentList)
-		if(Array.isArray(parsedCurrentList)) {
+		if(Array.isArray(parsedCurrentList) && parsedCurrentList.length > 0) {
 			this.list = parsedCurrentList
+		}
+		else {
+			this.list = this.defaultList
 		}
 	}
 

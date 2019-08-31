@@ -64,7 +64,7 @@ class ManageActivity extends Component {
 								flexDirection: 'row',
 								justifyContent: 'space-between',
 								paddingBottom: 12
-							}}>
+							}} key={item.id}>
 								<View style={{
 									flexDirection: 'row',
 									alignItems: 'center',
@@ -88,7 +88,7 @@ class ManageActivity extends Component {
 										<Text style={{
 											fontFamily: 'Inter-Regular',
 											fontSize: 16,
-											color: 'blue',
+											color: '#5388d0',
 											letterSpacing: -.5
 										}}>Remove</Text>
 									</TouchableOpacity>

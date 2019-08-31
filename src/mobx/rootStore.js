@@ -13,19 +13,27 @@ class RootStore {
 	@observable iconList = [
 		{
 			title: 'activity',
-			data: ["audio-video", "axe", "basketball", "bed empty", "biathlon", "bike", "billiards", "border-color", "bowling", "boxing-glove", "box-cutter", "briefcase", "broom", "brush", "bible", "buddhism", "camera", "cards", "cart", "cetltic-cross", "chess-knight", "chemical", "chef-hat", "christianity", "circular-saw", "compass", "controller-classic", "desktop-tower-monitor", "diving-snorkel", "flask-outline", "flower", "football", "guitar-accoustic", "hammer", "hand-saw", "headphones", "hinduism", "hiking", "hotel", "islam", "itunes", "instagram", "judaism", "library", "linkedin", "facebook", "map", "medal", "medical-bag", "microphone", "movie", "music", "needle", "podcast", "school", "spray", "stamper", "stethoscope", "phone", "piano", "pickaxe", "racquetball", "radio", "radioactive", "run", "saxophone", "shower-head", "silverware", "sleep", "swim", "sword-cross", "tablet-cellphone", "television", "tennis", "toilet", "toolbox", "twitter", "umbrella", "video-vintage", "volleyball", "walk", "whatssapp", "youtube"]
+			data: ["bed-empty", "broom", "cart", "flower", "headphones", "hotel", "itunes", "map", "music", "phone", "radio", "shower-head", "silverware", "sleep", "tablet-cellphone", "television", "toilet", "umbrella", "basketball", "biathlon", "bike", "billiards", "bowling", "boxing-glove", "diving-snorkel", "football", "hiking", "medal", "racquetball", "run", "soccer", "swim", "sword-cross", "tennis", "volleyball", "walk", "bible", "buddhism", "celtic-cross", "christianity", "hinduism", "islam", "judaism", "box-cutter", "border-color", "brush", "camera", "card", "chess-knight", "controller-classic", "guitar-acoustic", "library", "movie", "piano", "saxophone", "spray", "video-vintage", "audio-video", "axe", "briefcase", "chef-hat", "chemical-weapon", "circular-saw", "compass", "desktop-tower-monitor", "flask-outline", "hammer", "medical-bag", "microphone", "needle", "pickaxe", "podcast", "radioactive", "stamper", "stethoscope", "toolbox", "facebook", "instagram", "linkedin", "twitter", "whatsapp", "youtube"]
 		},
 		{
 			title: 'people',
-			data: ["account-switch", "artist", "baby", "brain", "charity", "doctor", "ghost", "glass", "hail", "hand", "hand-peace", "hand-pointing-up", "heart", "heart-broken", "human-male-female", "human-male", "human-female", "human-female-female", "human-male-male", "human-female-girl", "human-male-girl", "human-pregnant", "human-male-boy", "mother-nurse", "worker"]
+			data: ["account-switch", "artist", "baby", "brain", "charity", "doctor", "ghost", "hail", "hand", "hand-peace", "hand-pointing-up", "heart", "heart-broken", "human-male-female", "human-male", "human-female", "human-female-female", "human-male-male", "human-female-girl", "human-male-girl", "human-pregnant", "human-male-boy", "mother-nurse", "worker"]
 		},
 		{
 			title: 'food',
-			data: ["beer", "blender", "bowl", "bread-slice", "cake", "candycane", "cannabis", "carrot", "chili-mild", "coffee", "cup", "cupcake", "egg", "elephant", "food", "food-apple", "food-croissant", "food-for-drink", "food-variant", "glass-mug", "glass-wine", "grill", "hamburger", "ice-cream", "mushroom", "pill", "pizza", "popcorn", "pumpkin", "rice", "sausage ", "smoking", "stove", "tea", "tor"]
+			data: ["beer", "blender", "bowl", "bread-slice", "cake", "candycane", "cannabis", "carrot", "chili-mild", "coffee", "cookie", "cup", "cupcake", "food", "food-apple", "food-croissant", "food-fork-drink", "food-variant", "glass-mug", "glass-wine", "hamburger", "ice-cream", "muffin", "mushroom", "pill", "pizza", "popcorn", "pumpkin", "rice", "sausage", "smoking", "stove", "tea"]
 		},
 		{
 			title: 'transportation',
-			data: ["airplane", "airballoon", "ambulance", "bus", "car", "car-sport", "caravan", "ferry", "fire-truck", "forklift", "gokart", "motorbike", "taxi", "tractor", "towing", "train", "truck", "van-passenger", "van-utility"]
+			data: ["airballoon", "airplane", "ambulance", "bus", "car", "car-sports", "caravan", "ferry", "fire-truck", "forklift", "go-kart", "motorbike", "taxi", "tractor", "towing", "train", "truck", "van-passenger", "van-utility"]
+		},
+		{
+			title: 'animal',
+			data: ["bat", "bug", "cow", "dog", "duck", "fish", "ladybug", "panda", "pig", "rabbit", "sheep"]
+		},
+		{
+			title: 'weather',
+			data: ["weather-cloudy", "weather-fog", "weather-hail", "weather-hurricane", "weather-lightning", "weather-lightning-rainy", "weather-night", "weather-partlycloudy", "weather-pouring", "weather-rainy", "weather-snowy", "weather-snowy-rainy", "weather-sunny", "weather-sunset", "weather-windy-variant"]
 		}
 	]
 

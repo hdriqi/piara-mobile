@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 // iconURI: String
 
 class RelationStore {
+	@observable defaultList = [{"id":"jzyxhvr2","name":"Hangout","icon":"coffee"},{"id":"jzyxiso6","name":"Partner","icon":"flower"},{"id":"jzyxjnxf","name":"Co-worker","icon":"worker"},{"id":"jzyxk75z","name":"Myself","icon":"brain"}]
   @observable list = []
   @observable index = {
 		id: {}
@@ -17,8 +18,11 @@ class RelationStore {
 	async fetchInitialRelation() {
 		const currentList = await AsyncStorage.getItem('my-relation')
 		const parsedCurrentList = JSON.parse(currentList)
-		if(Array.isArray(parsedCurrentList)) {
+		if(Array.isArray(parsedCurrentList) && parsedCurrentList.length > 0) {
 			this.list = parsedCurrentList
+		}
+		else {
+			this.list = this.defaultList
 		}
 	}
 

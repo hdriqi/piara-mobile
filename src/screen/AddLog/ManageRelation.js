@@ -64,7 +64,7 @@ class ManageRelation extends Component {
 								flexDirection: 'row',
 								justifyContent: 'space-between',
 								paddingBottom: 12
-							}}>
+							}} key={item.id}>
 								<View style={{
 									flexDirection: 'row',
 									alignItems: 'center',
