@@ -33,7 +33,7 @@ export class SettingScreen extends Component {
           <Text style={{
             fontFamily: "Inter-Bold",
             fontSize: 18,
-            letterSpacing: -0.5
+            letterSpacing: -0.3
           }}>Setting</Text>
         </View>
       )
@@ -131,7 +131,8 @@ export class SettingScreen extends Component {
 							fontSize: 16,
 							fontFamily: 'Inter-SemiBold',
 							paddingBottom: 8,
-							color: '#282828'
+							color: '#3C3C3C',
+							letterSpacing: -0.3
 						}}>Reminder</Text>
 						<View style={{
 							flexDirection: 'row',
@@ -142,9 +143,10 @@ export class SettingScreen extends Component {
 								paddingBottom: 8
 							}}>
 								<Text style={{
-									fontSize: 16,
 									fontFamily: 'Inter-Regular',
-									color: '#282828'
+									fontSize: 16,
+									color: `#777777`,
+									letterSpacing: -0.3
 								}}>Notification</Text>
 							</View>
 							<View>
@@ -160,16 +162,20 @@ export class SettingScreen extends Component {
 								paddingBottom: 8
 							}}>
 								<Text style={{
-									fontSize: 16,
 									fontFamily: 'Inter-Regular',
+									fontSize: 16,
+									color: `#777777`,
+									letterSpacing: -0.3
 								}}>Time</Text>
 							</View>
 							<TouchableOpacity
 								onPress={() => Picker.show()}
 							>
 								<Text style={{
-									fontSize: 16,
 									fontFamily: 'Inter-Regular',
+									fontSize: 16,
+									color: `#3C3C3C`,
+									letterSpacing: -0.3
 								}}>{rootStore.userSetting.reminderTime.hour} : {rootStore.userSetting.reminderTime.minute}</Text>
 							</TouchableOpacity>
 						</View>
@@ -221,7 +227,8 @@ export class SettingScreen extends Component {
 							fontSize: 16,
 							fontFamily: 'Inter-SemiBold',
 							paddingBottom: 8,
-							color: '#282828'
+							color: '#3C3C3C',
+							letterSpacing: -0.3
 						}}>About</Text>
 						<View style={{
 							flexDirection: 'row',
@@ -232,9 +239,10 @@ export class SettingScreen extends Component {
 								paddingBottom: 8
 							}}>
 								<Text style={{
-									fontSize: 16,
 									fontFamily: 'Inter-Regular',
-									color: '#282828'
+									fontSize: 16,
+									color: `#777777`,
+									letterSpacing: -0.3
 								}}>Our Story</Text>
 							</View>
 						</View>
@@ -252,7 +260,8 @@ export class SettingScreen extends Component {
 							fontSize: 16,
 							fontFamily: 'Inter-SemiBold',
 							paddingBottom: 8,
-							color: '#282828'
+							color: '#3C3C3C',
+							letterSpacing: -0.3
 						}}>Account</Text>
 						<View style={{
 							flexDirection: 'row',
@@ -263,9 +272,10 @@ export class SettingScreen extends Component {
 								paddingBottom: 8
 							}}>
 								<Text style={{
-									fontSize: 16,
 									fontFamily: 'Inter-Regular',
-									color: '#282828'
+									fontSize: 16,
+									color: `#7DABC9`,
+									letterSpacing: -0.3
 								}}>Logout</Text>
 							</View>
 						</View>

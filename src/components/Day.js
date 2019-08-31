@@ -5,8 +5,8 @@ import { capitalize } from '../utils/text';
 
 const textStyle = {
   fontSize: 16,
-  fontFamily: "bold",
-  fontFamily: "Inter-Bold"
+  fontFamily: 'Inter-Bold',
+  color: '#3C3C3C'
 }
 
 export default class Day extends Component { 

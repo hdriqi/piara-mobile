@@ -180,15 +180,11 @@ class Home extends Component {
 											justifyContent: 'center',
 										}}>
 											<Text style={{
-												fontFamily: 'Inter-Regular',
-												fontSize: 18
-											}}>
-												Feeling
-												<Text style={{
-													fontFamily: 'Inter-SemiBold',
-													fontSize: 18
-												}}> {capitalize(activeLog.mood.name)}</Text>
-											</Text>
+												fontFamily: 'Inter-SemiBold',
+												fontSize: 24,
+												letterSpacing: -0.25,
+												color: `#3C3C3C`,
+											}}>Feeling {capitalize(activeLog.mood.name)}</Text>
 										</View>
 									</View>
 									<View style={{
@@ -216,12 +212,14 @@ class Home extends Component {
 															<View style={{
 																paddingRight: 4
 															}}>
-																<Icon name={activity.icon} size={16} />
+																<Icon name={activity.icon} size={16} color={`#777777`} />
 															</View>
 															<View>
 																<Text style={{
+																	fontFamily: 'Inter-Regular',
 																	fontSize: 16,
-																	fontFamily: 'Inter-Regular'
+																	color: `#777777`,
+																	letterSpacing: -0.3
 																}}>{activity.name}</Text>
 															</View>
 														</View>
@@ -251,12 +249,14 @@ class Home extends Component {
 															<View style={{
 																paddingRight: 4
 															}}>
-																<Icon name={relation.icon} size={16} />
+																<Icon name={relation.icon} size={16} color={`#777777`} />
 															</View>
 															<View>
 																<Text style={{
+																	fontFamily: 'Inter-Regular',
 																	fontSize: 16,
-																	fontFamily: 'Inter-Regular'
+																	color: `#777777`,
+																	letterSpacing: -0.3
 																}}>{relation.name}</Text>
 															</View>
 														</View>
@@ -278,7 +278,7 @@ class Home extends Component {
 											<Text style={{
 												fontFamily: 'Inter-Regular',
 												fontSize: 16,
-												color: '#5388d0',
+												color: '#7DABC9',
 												letterSpacing: -.5
 											}}>Edit Data</Text>
 										</TouchableOpacity>
@@ -324,7 +324,7 @@ class Home extends Component {
 														fontSize: 16,
 														textAlign: 'center',
 														color: `#777777`,
-														letterSpacing: -0.5
+														letterSpacing: -0.3
 													}}>Fill your daily mood to understand yourself and reflect your emotional state</Text>
 												</TouchableWithoutFeedback>
 											) : (
@@ -340,7 +340,7 @@ class Home extends Component {
 														fontSize: 16,
 														textAlign: 'center',
 														color: `#777777`,
-														letterSpacing: -0.5
+														letterSpacing: -0.3
 													}}>This day is not started yet, you can only track today or past day</Text>
 												</TouchableWithoutFeedback>
 											)

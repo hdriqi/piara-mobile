@@ -34,7 +34,7 @@ class ManageActivity extends Component {
           <Text style={{
             fontFamily: "Inter-Bold",
             fontSize: 18,
-            letterSpacing: -0.5
+            letterSpacing: -0.3
           }}>Manage Activity</Text>
         </View>
       ),
@@ -72,12 +72,14 @@ class ManageActivity extends Component {
 									<View style={{
 										paddingRight: 8
 									}}>
-										<Icon size={24} name={item.icon} />
+										<Icon size={24} name={item.icon} color={`#3C3C3C`} />
 									</View>
 									<View>
 										<Text style={{
-											fontFamily: 'Inter-Medium',
-											fontSize: 16
+											fontFamily: 'Inter-Regular',
+											fontSize: 16,
+											color: `#3C3C3C`,
+											letterSpacing: -0.3
 										}}>{ item.name }</Text>
 									</View>
 								</View>
@@ -88,7 +90,7 @@ class ManageActivity extends Component {
 										<Text style={{
 											fontFamily: 'Inter-Regular',
 											fontSize: 16,
-											color: '#5388d0',
+											color: '#E49292',
 											letterSpacing: -.5
 										}}>Remove</Text>
 									</TouchableOpacity>

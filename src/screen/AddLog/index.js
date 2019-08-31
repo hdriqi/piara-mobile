@@ -118,23 +118,24 @@ class AddLog extends Component {
           paddingBottom: 8
         }}>
           <Text style={{
-            fontSize: 28,
-            fontFamily: 'Inter-Medium',
+            fontSize: 24,
+            fontFamily: 'Inter-Regular',
             textAlign: 'center',
-            letterSpacing: -.5
+            letterSpacing: -.3,
+            color: `#777777`
           }}>{capitalize(getMonthName(currentDate.getMonth())).slice(0, 3)} {currentDate.getDate()}, {currentDate.getFullYear()}</Text>
           <Text style={{
-            fontSize: 28,
-            fontFamily: 'Inter-Medium',
-            textAlign: 'center',
-            letterSpacing: -.5,
+            fontFamily: 'Inter-SemiBold',
+            fontSize: 24,
+            letterSpacing: -0.25,
+            color: `#3C3C3C`,
             paddingBottom: 16
           }}>How was your day?</Text>
           <Text style={{
             fontSize: 24,
             fontFamily: 'Inter-Regular',
             letterSpacing: -.3,
-            color: '#2E2E2E'
+            color: `#777777`
           }}>{capitalize(logStore.inputLog.mood.name)}</Text>
         </View>
         <View style={{
@@ -152,7 +153,8 @@ class AddLog extends Component {
           thumbStyle={{
             width: 40,
             height: 40,
-            borderRadius: 10
+            borderRadius: 10,
+            backgroundColor: '#7DABC9'
           }}
           minimumValue={0}
           maximumValue={4}

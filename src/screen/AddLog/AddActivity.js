@@ -74,7 +74,7 @@ class AddActivity extends Component {
           <Text style={{
             fontFamily: "Inter-Bold",
             fontSize: 18,
-            letterSpacing: -0.5
+            letterSpacing: -0.3
           }}>Add Activity</Text>
         </View>
       ),

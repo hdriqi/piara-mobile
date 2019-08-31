@@ -34,7 +34,7 @@ class ManageRelation extends Component {
           <Text style={{
             fontFamily: "Inter-Bold",
             fontSize: 18,
-            letterSpacing: -0.5
+            letterSpacing: -0.3
           }}>Manage Relation</Text>
         </View>
       ),
@@ -88,7 +88,7 @@ class ManageRelation extends Component {
 										<Text style={{
 											fontFamily: 'Inter-Regular',
 											fontSize: 16,
-											color: '#5388d0',
+											color: '#E49292',
 											letterSpacing: -.5
 										}}>Remove</Text>
 									</TouchableOpacity>

@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import logStore from '../../mobx/logStore'
 import activityStore from '../../mobx/activityStore'
 import relationStore from '../../mobx/relationStore'
+import { capitalize } from '../../utils/text';
 
 @observer
 class AdditionalLog extends Component {
@@ -36,7 +37,7 @@ class AdditionalLog extends Component {
           <Text style={{
             fontFamily: "Inter-Bold",
             fontSize: 18,
-            letterSpacing: -0.5
+            letterSpacing: -0.3
           }}>Add Log</Text>
         </View>
       ),
@@ -95,13 +96,15 @@ class AdditionalLog extends Component {
           paddingBottom: 28
         }}>
           <Text style={{
-            fontFamily: 'Inter-Medium',
-            fontSize: 16
+            fontFamily: 'Inter-Regular',
+            letterSpacing: -.3,
+            color: `#777777`
           }}>Feeling</Text>
           <Text style={{
-            fontFamily: 'Inter-Bold',
-            fontSize: 16
-          }}>{logStore.inputLog.mood.name}</Text>
+            fontFamily: 'Inter-SemiBold',
+            fontSize: 16,
+            color: `#3C3C3C`
+          }}>{capitalize(logStore.inputLog.mood.name)}</Text>
         </View>
         <View style={{
           flexDirection: 'row',
@@ -113,8 +116,9 @@ class AdditionalLog extends Component {
           }}>
             <Text style={{
               fontSize: 16,
-              fontFamily: 'Inter-Bold',
-              letterSpacing: -.5
+              fontFamily: 'Inter-SemiBold',
+              letterSpacing: -.5,
+              color: `#3C3C3C`
             }}>What have you been up to?</Text>
           </View>
           <TouchableOpacity style={{
@@ -169,8 +173,9 @@ class AdditionalLog extends Component {
           }}>
             <Text style={{
               fontSize: 16,
-              fontFamily: 'Inter-Bold',
-              letterSpacing: -.5
+              fontFamily: 'Inter-SemiBold',
+              letterSpacing: -.5,
+              color: `#3C3C3C`
             }}>Who are you with?</Text>
           </View>
           <TouchableOpacity style={{
