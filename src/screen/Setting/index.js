@@ -34,7 +34,7 @@ export class SettingScreen extends Component {
             fontFamily: "Inter-Bold",
             fontSize: 18,
             letterSpacing: -0.3
-          }}>Setting</Text>
+          }}>SETTING</Text>
         </View>
       )
     }
@@ -293,9 +293,7 @@ const SettingNavigator = createStackNavigator({
 	defaultNavigationOptions: {
     headerStyle: {
       elevation: 0,
-      shadowOpacity: 0,
-      // borderBottomWidth: 1,
-      // borderBottomColor: '#EEEEEE'
+      shadowOpacity: 0
     },
   },
 })
