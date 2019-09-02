@@ -1,6 +1,7 @@
 import { observable, toJS, action } from 'mobx'
 import uid from '../utils/uid'
 import AsyncStorage from '@react-native-community/async-storage'
+import RNBlockstackSdk from "react-native-blockstack"
 
 // schema
 // id: String
@@ -41,6 +42,20 @@ class RelationStore {
 		})
 		await AsyncStorage.setItem('my-relation', JSON.stringify(this.list))
 	}
+
+	@action
+  async backupList() {
+    await RNBlockstackSdk.putFile('my-relation', JSON.stringify(this.list), {
+      encrypt: true
+    })
+	}
+	
+	@action
+  async restoreList() {
+    await RNBlockstackSdk.getFile('my-relation', {
+      decrypt: true
+    })
+  }
 
 	remove(id) {
 		const idx = this.list.findIndex((activity) => activity.id === id)

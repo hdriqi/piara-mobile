@@ -63,11 +63,9 @@ class HomeScreen extends Component {
             <View style={{
 							flex: 1,
 							flexDirection: 'row',
-							alignItems: 'center'
 						}}>
 							<View>
 								<Text style={{
-									textAlign: 'center',
 									fontSize: 24,
 									fontFamily: 'Inter-Bold',
 									fontWeight: 'bold',
@@ -77,7 +75,7 @@ class HomeScreen extends Component {
 								</Text>
 							</View>
 							<View>
-								<Icon name="chevron-down" size={24} />
+								<Icon name="chevron-down" size={24} color={`#777777`} />
 							</View>
 						</View>
           </TouchableOpacity>

@@ -1,5 +1,9 @@
 import { observable, toJS, action } from 'mobx'
 import AsyncStorage from '@react-native-community/async-storage'
+import activityStore from './activityStore';
+import logStore from './logStore';
+import relationStore from './relationStore';
+import RNBlockstackSdk from "react-native-blockstack"
 
 class RootStore {
 	@observable userSetting = {}
@@ -71,6 +75,31 @@ class RootStore {
 			this.companion.cat = cat
 			await AsyncStorage.setItem('companion-cat', JSON.stringify(this.companion.cat))
 		}
+	}
+
+	@action
+	async backupData() {
+		await activityStore.backupList()
+		await logStore.backupList()
+		await relationStore.backupList()
+
+		return true
+	}
+
+	@action
+	async restoreData() {
+		await activityStore.restoreList()
+		await logStore.restoreList()
+		await relationStore.restoreList()
+
+		return true
+	}
+
+	@action
+	async logOut() {
+		await AsyncStorage.setItem('authToken', JSON.stringify(null))
+
+		return true
 	}
 
 	@action

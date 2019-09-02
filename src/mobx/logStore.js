@@ -1,6 +1,7 @@
 import { observable, toJS, action } from 'mobx'
 import uid from '../utils/uid'
 import AsyncStorage from '@react-native-community/async-storage'
+import RNBlockstackSdk from "react-native-blockstack"
 
 class LogStore {
   @observable list = []
@@ -35,7 +36,7 @@ class LogStore {
       const parsedCurrentList = JSON.parse(currentList)
       if(Array.isArray(parsedCurrentList)) {
         this.list = parsedCurrentList
-      } 
+      }
     } catch (err) {
       this.list = []
     }
@@ -69,6 +70,20 @@ class LogStore {
     }
     
     await AsyncStorage.setItem(`my-log`, JSON.stringify(this.list))
+  }
+
+  @action
+  async backupList() {
+    await RNBlockstackSdk.putFile('my-log', JSON.stringify(this.list), {
+      encrypt: true
+    })
+  }
+
+  @action
+  async restoreList() {
+    await RNBlockstackSdk.getFile('my-log', {
+      decrypt: true
+    })
   }
 
   setActiveLog(key) {

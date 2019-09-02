@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Switch } from 'react-native'
+import { Text, View, Switch, Alert } from 'react-native'
 import { createStackNavigator } from 'react-navigation'
 import SetupPin from './SetupPin'
 import { NavigationEvents } from 'react-navigation'
@@ -9,11 +9,13 @@ import { observable } from 'mobx'
 import Picker from 'react-native-picker'
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler'
 import PushNotification from 'react-native-push-notification'
+import Modal from "react-native-modal"
 
 @observer
 export class SettingScreen extends Component {
 	@observable _switchState = null
 	@observable _switchReminder = null
+	@observable _isLoading = false
 
 	constructor(prop) {
 		super(prop)
@@ -111,6 +113,51 @@ export class SettingScreen extends Component {
 		}	
 	}
 
+	async _backupData() {
+		this._isLoading = true
+		try {
+			await rootStore.backupData()
+			Alert.alert('Backup Successful', 'Your data has been encrypted and succesfully saved in the cloud!')
+		} catch (err) {
+			Alert.alert('Backup Failed', 'Please check your internet connection')
+		}
+		this._isLoading = false
+	}
+
+	async _logOut() {
+		await rootStore.logOut()
+		this.props.navigation.navigate('SignIn', {
+			prevRoute: 'logOut'
+		})
+	}
+
+	async _confirmRestoreData() {
+		this._isLoading = true
+		try {
+			await rootStore.restoreData()	
+			Alert.alert('Restore Successful', 'Your data has been restored successfully!')
+		} catch (err) {
+			Alert.alert('Restore Failed', 'Please check your internet connection')
+		}
+		this._isLoading = false
+	}
+
+	async _restoreData() {
+		Alert.alert(
+			'Are you sure you want to restore data from your backup?',
+			'Your current local data will be replaced with the latest data in the cloud',
+			[
+				{
+					text: 'Cancel',
+					style: 'cancel',
+				},
+				{text: 'OK', onPress: () => this._confirmRestoreData()},
+			],
+			{cancelable: false},
+		)
+		
+	}
+
 	render() {
 		return (
 			<ScrollView>
@@ -119,6 +166,19 @@ export class SettingScreen extends Component {
 						this._init()
 					}}
 				/>
+				<Modal isVisible={this._isLoading}>
+					<View style={{ 
+						flex: 1,
+						justifyContent: 'center'
+					}}>
+            <Text style={{
+							color: 'white',
+							fontFamily: 'Inter-SemiBold',
+							fontSize: 16,
+							textAlign: 'center'
+						}}>Loading...</Text>
+          </View>
+				</Modal>
 				<View style={{
 					paddingVertical: 16,
 					borderBottomWidth: 1,
@@ -194,8 +254,46 @@ export class SettingScreen extends Component {
 							fontFamily: 'Inter-SemiBold',
 							paddingBottom: 8,
 							color: '#282828'
-						}}>Privacy</Text>
+						}}>Data</Text>
 						<View style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+						}}>
+							<TouchableOpacity
+								onPress={() => this._backupData()}
+							>
+								<View style={{
+									paddingBottom: 8
+								}}>
+									<Text style={{
+										fontSize: 16,
+										fontFamily: 'Inter-Regular',
+										color: '#7DABC9'
+									}}>Backup</Text>
+								</View>
+							</TouchableOpacity>
+						</View>
+						<View style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+						}}>
+							<TouchableOpacity
+								onPress={() => this._restoreData()}
+							>
+								<View style={{
+									paddingBottom: 8
+								}}>
+									<Text style={{
+										fontSize: 16,
+										fontFamily: 'Inter-Regular',
+										color: '#7DABC9'
+									}}>Restore</Text>
+								</View>
+							</TouchableOpacity>
+						</View>
+						{/* <View style={{
 							flexDirection: 'row',
 							justifyContent: 'space-between',
 							alignItems: 'center',
@@ -212,7 +310,7 @@ export class SettingScreen extends Component {
 							<View>
 								<Switch value={this._switchState} onValueChange={this.switchOnPress} />
 							</View>
-						</View>
+						</View> */}
 					</View>
 				</View>
 				<View style={{
@@ -268,16 +366,20 @@ export class SettingScreen extends Component {
 							justifyContent: 'space-between',
 							alignItems: 'center',
 						}}>
-							<View style={{
-								paddingBottom: 8
-							}}>
-								<Text style={{
-									fontFamily: 'Inter-Regular',
-									fontSize: 16,
-									color: `#7DABC9`,
-									letterSpacing: -0.3
-								}}>Logout</Text>
-							</View>
+							<TouchableOpacity
+								onPress={() => this._logOut()}
+							>
+								<View style={{
+									paddingBottom: 8
+								}}>
+									<Text style={{
+										fontFamily: 'Inter-Regular',
+										fontSize: 16,
+										color: `#7DABC9`,
+										letterSpacing: -0.3
+									}}>Logout</Text>
+								</View>
+							</TouchableOpacity>
 						</View>
 					</View>
 				</View>

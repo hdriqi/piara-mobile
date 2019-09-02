@@ -52,11 +52,11 @@ class AnalyticsScreen extends Component {
             <View style={{
 							flex: 1,
 							flexDirection: 'row',
-							alignItems: 'center'
+							// alignItems: 'center'
 						}}>
 							<View>
 								<Text style={{
-									textAlign: 'center',
+									// textAlign: 'center',
 									fontSize: 24,
 									fontFamily: 'Inter-Bold',
 									fontWeight: 'bold',
@@ -66,7 +66,7 @@ class AnalyticsScreen extends Component {
 								</Text>
 							</View>
 							<View>
-								<Icon name="chevron-down" size={24} />
+								<Icon name="chevron-down" size={24} color={`#777777`} />
 							</View>
 						</View>
           </TouchableOpacity>
@@ -251,6 +251,7 @@ class AnalyticsScreen extends Component {
 			</Defs>
 		)
 
+    console.log(this._chartData)
 		return (
 			<React.Fragment>
         <NavigationEvents
@@ -263,7 +264,7 @@ class AnalyticsScreen extends Component {
             <ScrollView>
               <LineChart
                 style={{ height: 100 }}
-                curve={shape.curveBasisOpen}
+                curve={shape.curveBundle}
                 data={this._chartData}
                 animate={true}
                 svg={{
@@ -404,38 +405,47 @@ class AnalyticsScreen extends Component {
                   paddingVertical: 8
                 }}>Activity</Text>
                 {
-                  this._choosenMoodAnalysis.activityCount && this._choosenMoodAnalysis.activityCount.map(activity => {
-                    return (
-                      <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginBottom: 12
-                      }} key={activity.id}>
+                  this._choosenMoodAnalysis.activityCount &&  this._choosenMoodAnalysis.activityCount.length > 0 ?(
+                    this._choosenMoodAnalysis.activityCount.map(activity => {
+                      return (
                         <View style={{
                           flexDirection: 'row',
-                          alignItems: 'center'
-                        }}>
-                          <Icon style={{
-                            marginRight: 8
-                          }} size={20} name={activity.icon} color={`#282828`} />
+                          justifyContent: 'space-between',
+                          marginBottom: 12
+                        }} key={activity.id}>
+                          <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                          }}>
+                            <Icon style={{
+                              marginRight: 8
+                            }} size={20} name={activity.icon} color={`#282828`} />
+                            <Text style={{
+                              fontFamily: 'Inter-Regular',
+                              fontSize: 16,
+                              color: `#282828`,
+                              letterSpacing: -0.3
+                            }}>{activity.name}</Text>
+                          </View>
+                          <View>
                           <Text style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 16,
                             color: `#282828`,
                             letterSpacing: -0.3
-                          }}>{activity.name}</Text>
+                          }}>{Math.round((activity.count/this._choosenMoodAnalysis.activityTotal) * 100)}%</Text>
+                          </View>
                         </View>
-                        <View>
-                        <Text style={{
-                          fontFamily: 'Inter-Regular',
-                          fontSize: 16,
-                          color: `#282828`,
-                          letterSpacing: -0.3
-                        }}>{Math.round((activity.count/this._choosenMoodAnalysis.activityTotal) * 100)}%</Text>
-                        </View>
-                      </View>
-                    )
-                  })
+                      )
+                    })
+                  ) : (
+                    <Text style={{
+                      fontFamily: 'Inter-Regular',
+                      fontSize: 16,
+                      color: `#282828`,
+                      letterSpacing: -0.3
+                    }}>No Data</Text>
+                  ) 
                 }
                 <Text style={{
                   fontSize: 12,
@@ -444,38 +454,47 @@ class AnalyticsScreen extends Component {
                   paddingVertical: 8,
                 }}>Relation</Text>
                 {
-                  this._choosenMoodAnalysis.relationCount && this._choosenMoodAnalysis.relationCount.map(relation => {
-                    return (
-                      <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginBottom: 8
-                      }} key={relation.id}>
+                  this._choosenMoodAnalysis.relationCount && this._choosenMoodAnalysis.relationCount.length > 0 ? (
+                    this._choosenMoodAnalysis.relationCount.map(relation => {
+                      return (
                         <View style={{
                           flexDirection: 'row',
-                          alignItems: 'center'
-                        }}>
-                          <Icon style={{
-                            marginRight: 8
-                          }} size={20} name={relation.icon} color={`#282828`} />
+                          justifyContent: 'space-between',
+                          marginBottom: 8
+                        }} key={relation.id}>
+                          <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                          }}>
+                            <Icon style={{
+                              marginRight: 8
+                            }} size={20} name={relation.icon} color={`#282828`} />
+                            <Text style={{
+                              fontFamily: 'Inter-Regular',
+                              fontSize: 16,
+                              color: `#282828`,
+                              letterSpacing: -0.3
+                            }}>{relation.name}</Text>
+                          </View>
+                          <View>
                           <Text style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 16,
                             color: `#282828`,
                             letterSpacing: -0.3
-                          }}>{relation.name}</Text>
+                          }}>{Math.round((relation.count/this._choosenMoodAnalysis.relationTotal) * 100)}%</Text>
+                          </View>
                         </View>
-                        <View>
-                        <Text style={{
-                          fontFamily: 'Inter-Regular',
-                          fontSize: 16,
-                          color: `#282828`,
-                          letterSpacing: -0.3
-                        }}>{Math.round((relation.count/this._choosenMoodAnalysis.relationTotal) * 100)}%</Text>
-                        </View>
-                      </View>
-                    )
-                  })
+                      )
+                    })
+                  ) : (
+                    <Text style={{
+                      fontFamily: 'Inter-Regular',
+                      fontSize: 16,
+                      color: `#282828`,
+                      letterSpacing: -0.3
+                    }}>No Data</Text>
+                  ) 
                 }
               </View>
             </ScrollView>
