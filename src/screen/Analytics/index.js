@@ -6,7 +6,7 @@ import * as shape from 'd3-shape'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import logStore from '../../mobx/logStore'
-import { observable, transaction } from 'mobx'
+import { observable, transaction, toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { groupBy } from '../../utils/misc'
 import { getTotalDaysInMonth, getPickerData, getMonthName, getMonthIdx } from '../../utils/date'
@@ -203,7 +203,7 @@ class AnalyticsScreen extends Component {
       const targetLog = logStore.list.find((log) => {
         return log.key == `${year}-${month}-${date+1}`
       })
-      return parseInt(targetLog ? targetLog.mood.value : 2)
+      return parseFloat(targetLog ? targetLog.mood.value : 2)
     })
 
     const average = data => data.reduce((sum, value) => sum + value, 0) / data.length
@@ -251,7 +251,6 @@ class AnalyticsScreen extends Component {
 			</Defs>
 		)
 
-    console.log(this._chartData)
 		return (
 			<React.Fragment>
         <NavigationEvents
@@ -387,12 +386,20 @@ class AnalyticsScreen extends Component {
                 <TouchableOpacity
                   onPress={this._moodPicker}
                 >
-                  <Text style={{
-                    fontSize: 18,
-                    fontFamily: 'Inter-SemiBold',
-                    paddingVertical: 8,
-                    color: '#282828'
-                  }}>{this._choosenMoodAnalyze && this._choosenMoodAnalyze.toUpperCase()}</Text>
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}>
+                    <Text style={{
+                      fontSize: 18,
+                      fontFamily: 'Inter-SemiBold',
+                      paddingVertical: 8,
+                      color: '#282828'
+                    }}>{this._choosenMoodAnalyze && this._choosenMoodAnalyze.toUpperCase()} </Text>
+                    <View>
+                      <Icon name="chevron-down" size={20} color={`#777777`} />
+                    </View>
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={{
