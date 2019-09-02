@@ -4,6 +4,7 @@ import Picker from 'react-native-picker'
 import { observer } from 'mobx-react'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { createStackNavigator } from 'react-navigation'
 
 import Swiper from '../../components/Swiper'
 import Day from '../../components/Day' 
@@ -14,7 +15,7 @@ import { getTotalDaysInMonth, getDayName, getPickerData, getMonthName, getMonthI
 import { capitalize } from '../../utils/text'
 
 @observer
-class Home extends Component {
+class HomeScreen extends Component {
 	@observable _activeKey = 0
 	@observable _selectedMonth = new Date().getMonth()
 	@observable _selectedYear = new Date().getFullYear()
@@ -40,12 +41,59 @@ class Home extends Component {
 		this._currentTime = new Date().getTime()
 		this._currentMonth = new Date().getMonth()
 		this._firstItem = new Date().getDate() - 1
+		this._activeKey = `${this._selectedYear}-${this._selectedMonth+1}-${this._firstItem+1}`
 		this._pickerData = []
 		this._swiperItemWidth = 56
-		this._initPicker = this._initPicker.bind(this)
+		this._monthPicker = this._monthPicker.bind(this)
+	}
+
+	static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: (
+        <View style={{
+          flex: 1,
+          alignItems: 'center'
+        }}>
+          <TouchableOpacity
+            onPress={navigation.getParam('_monthPicker')}
+            style={{
+              padding: 8
+            }}
+          >
+            <View style={{
+							flex: 1,
+							flexDirection: 'row',
+							alignItems: 'center'
+						}}>
+							<View>
+								<Text style={{
+									textAlign: 'center',
+									fontSize: 24,
+									fontFamily: 'Inter-Bold',
+									fontWeight: 'bold',
+									letterSpacing: -0.3
+								}}>
+									{navigation.getParam('_selectedMonthAndYear')}
+								</Text>
+							</View>
+							<View>
+								<Icon name="chevron-down" size={24} />
+							</View>
+						</View>
+          </TouchableOpacity>
+        </View>
+      )
+    }
 	}
 	
-	async _initPicker() {
+	componentDidMount() {
+		this.props.navigation.setParams({ 
+      _monthPicker: this._monthPicker,
+      _selectedMonthAndYear: `${capitalize(getMonthName(this._selectedMonth))} ${this._selectedYear}`
+		})
+	}
+	
+	async _monthPicker() {
 		const self = this
 		const pickerData = getPickerData().map((item) => `${capitalize(getMonthName(item.month))} ${item.year}`)
 		Picker.init({
@@ -65,12 +113,12 @@ class Home extends Component {
 					self._activeKey = `${self._selectedYear}-${self._selectedMonth+1}-${self._firstItem+1}`
 					// self._activeTime = new Date(Date.parse(activeKey)).getTime()
 				})
+				self.props.navigation.setParams({ 
+          _monthPicker: self._monthPicker,
+          _selectedMonthAndYear: `${capitalize(getMonthName(self._selectedMonth))} ${self._selectedYear}`
+        })
 			}
 		})
-	}
-
-	_showMonthPicker() {
-		this._initPicker()
 		Picker.show()
 	}
 
@@ -89,38 +137,6 @@ class Home extends Component {
 			<View style={{ 
 				flex: 1
 			}}>
-				<View style={{
-					flex: 1
-				}}>
-					<TouchableOpacity
-						onPress={() => this._showMonthPicker()}
-						style={{
-							height: '100%',
-							alignItems: 'center'
-						}}
-					>
-						<View style={{
-							flex: 1,
-							flexDirection: 'row',
-							alignItems: 'center'
-						}}>
-							<View>
-								<Text style={{
-									textAlign: 'center',
-									fontSize: 24,
-									fontFamily: 'Inter-Bold',
-									fontWeight: 'bold',
-									letterSpacing: -0.3
-								}}>
-									{capitalize(getMonthName(this._selectedMonth))} {this._selectedYear}
-								</Text>
-							</View>
-							<View>
-								<Icon name="chevron-down" size={24} />
-							</View>
-						</View>
-					</TouchableOpacity>
-				</View>
 				<View style={{
 					flex: 12
 				}}>
@@ -147,7 +163,7 @@ class Home extends Component {
 					bottom: 0
 				}}>
 					<View style={{
-						flex: 2
+						flex: 1
 					}}>
 
 					</View>
@@ -356,4 +372,26 @@ class Home extends Component {
 	}
 }
 
-export default Home
+const HomeNavigator = createStackNavigator({
+	Home: HomeScreen
+}, {
+	defaultNavigationOptions: {
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0
+    },
+  },
+})
+
+HomeNavigator.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
+  }
+
+  return {
+    tabBarVisible,
+  }
+}
+
+export default HomeNavigator

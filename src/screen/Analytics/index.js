@@ -33,6 +33,7 @@ class AnalyticsScreen extends Component {
 		super(props)
     this._analyzeMonthly = this._analyzeMonthly.bind(this)
     this._monthPicker = this._monthPicker.bind(this)
+    this._moodPicker = this._moodPicker.bind(this)
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -48,11 +49,26 @@ class AnalyticsScreen extends Component {
               padding: 8
             }}
           >
-            <Text style={{
-              fontFamily: "Inter-Bold",
-              fontSize: 18,
-              letterSpacing: -0.3
-            }}>{navigation.getParam('_selectedMonthAndYear')}</Text>
+            <View style={{
+							flex: 1,
+							flexDirection: 'row',
+							alignItems: 'center'
+						}}>
+							<View>
+								<Text style={{
+									textAlign: 'center',
+									fontSize: 24,
+									fontFamily: 'Inter-Bold',
+									fontWeight: 'bold',
+									letterSpacing: -0.3
+								}}>
+									{navigation.getParam('_selectedMonthAndYear')}
+								</Text>
+							</View>
+							<View>
+								<Icon name="chevron-down" size={24} />
+							</View>
+						</View>
           </TouchableOpacity>
         </View>
       )
@@ -73,10 +89,29 @@ class AnalyticsScreen extends Component {
     this._overviewData = analyze.overview
     this._moodAnalyze = analyze.analysis
     this._choosenMoodAnalysis = this._moodAnalyze.find(x => {
-      return x.key === this._choosenMoodAnalyze
+      return x.key === this._choosenMoodAnalyze.toLowerCase()
     }) || {}
   }
 
+  async _moodPicker() {
+		const self = this
+    const pickerData = moodStore.list.map(x => capitalize(x.name))
+		Picker.init({
+			pickerData: pickerData,
+			pickerTitleText: "Select Mood",
+			pickerFontFamily: 'Inter-SemiBold',
+			selectedValue: [`${capitalize(this._choosenMoodAnalyze)}`],
+			pickerTextEllipsisLen: 12,
+			pickerConfirmBtnText: 'Confirm',
+			pickerCancelBtnText: 'Cancel',
+			onPickerConfirm: (data) => {
+        self._choosenMoodAnalyze = data[0]
+        self._init()
+			}
+    })
+    Picker.show()
+  }
+  
   async _monthPicker() {
 		const self = this
     const pickerData = getPickerData().map((item) => `${capitalize(getMonthName(item.month))} ${item.year}`)
@@ -217,228 +252,247 @@ class AnalyticsScreen extends Component {
 		)
 
 		return (
-			<ScrollView>
+			<React.Fragment>
         <NavigationEvents
 					onWillFocus={payload => {
 						this._init()
 					}}
 				/>
-        <View>
-          {
-            Array.isArray(this._moodAnalyze) && this._moodAnalyze.length > 0 ? (
-              <View>
-                <LineChart
-                  style={{ height: 200 }}
-                  curve={shape.curveBasisOpen}
-                  data={this._chartData}
-                  animate={true}
-                  svg={{
-                    strokeWidth: 4,
-                    stroke: 'url(#gradient)',
-                  }}
-                  contentInset={{ top: 20, bottom: 20 }}
-                  yMin={0}
-                  yMax={4}
-                >
-                  <Gradient />
-                </LineChart>
+        {
+          Array.isArray(this._moodAnalyze) && this._moodAnalyze.length > 0 ? (
+            <ScrollView>
+              <LineChart
+                style={{ height: 100 }}
+                curve={shape.curveBasisOpen}
+                data={this._chartData}
+                animate={true}
+                svg={{
+                  strokeWidth: 4,
+                  stroke: 'url(#gradient)',
+                }}
+                contentInset={{ top: 20, bottom: 20 }}
+                yMin={0}
+                yMax={4}
+              >
+                <Gradient />
+              </LineChart>
+              <View style={{
+                marginVertical: 8,
+                borderBottomWidth: 1,
+                borderBottomColor: '#EEEEEE'
+              }}></View>
+              <View style={{
+                paddingHorizontal: 16,
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontFamily: 'Inter-SemiBold',
+                  paddingVertical: 8,
+                  color: '#282828'
+                }}>OVERVIEW</Text>
+              </View>
+              <View style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                paddingHorizontal: 16
+              }}>
                 <View style={{
-                  marginVertical: 8,
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#EEEEEE'
-                }}></View>
-                <View style={{
-                  paddingHorizontal: 16,
+                  width: '33%'
                 }}>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    color: '#777777'
+                  }}>Avg. Mood</Text>
+                  <Text style={{
+                    fontSize: 18,
+                    fontFamily: 'Inter-SemiBold',
+                    paddingBottom: 8,
+                    color: '#282828'
+                  }}>{this._overviewData.avgMood && this._overviewData.avgMood.toUpperCase()}</Text>
+                </View>
+                {/* <View style={{
+                  width: '50%'
+                }}>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    color: '#282828'
+                  }}>MOOD SWING</Text>
+                  <Text style={{
+                    fontSize: 18,
+                    fontFamily: 'Inter-SemiBold',
+                    paddingBottom: 8,
+                    color: '#282828'
+                  }}>{this._overviewData.moodSwing && this._overviewData.moodSwing.toUpperCase()}</Text>
+                </View> */}
+                <View style={{
+                  width: '33%'
+                }}>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    color: '#777777'
+                  }}>Avg. Activity</Text>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    paddingBottom: 8,
+                    color: '#282828'
+                  }}><Text style={{
+                    fontSize: 18,
+                    fontFamily: 'Inter-SemiBold',
+                    color: '#282828'
+                  }}>{this._overviewData.avgActivity}</Text> / day</Text>
+                </View>
+                <View style={{
+                  width: '33%'
+                }}>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    color: '#777777'
+                  }}>Avg. Relation</Text>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    paddingBottom: 8,
+                    color: '#282828'
+                  }}><Text style={{
+                    fontSize: 18,
+                    fontFamily: 'Inter-SemiBold',
+                    color: '#282828'
+                  }}>{this._overviewData.avgRelation}</Text> / day</Text>
+                </View>
+              </View>
+              <View style={{
+                marginVertical: 8,
+                borderBottomWidth: 1,
+                borderBottomColor: '#EEEEEE'
+              }}></View>
+              <View style={{
+                paddingHorizontal: 16,
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}>
+                <View>
                   <Text style={{
                     fontSize: 18,
                     fontFamily: 'Inter-SemiBold',
                     paddingVertical: 8,
                     color: '#282828'
-                  }}>OVERVIEW</Text>
+                  }}>MOOD ANALYSIS</Text>
                 </View>
-                <View style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  paddingHorizontal: 16
-                }}>
-                  <View style={{
-                    width: '50%'
-                  }}>
-                    <Text style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      color: '#282828'
-                    }}>AVG MOOD</Text>
-                    <Text style={{
-                      fontSize: 18,
-                      fontFamily: 'Inter-SemiBold',
-                      paddingBottom: 8,
-                      color: '#282828'
-                    }}>{this._overviewData.avgMood && this._overviewData.avgMood.toUpperCase()}</Text>
-                  </View>
-                  <View style={{
-                    width: '50%'
-                  }}>
-                    <Text style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      color: '#282828'
-                    }}>MOOD SWING</Text>
-                    <Text style={{
-                      fontSize: 18,
-                      fontFamily: 'Inter-SemiBold',
-                      paddingBottom: 8,
-                      color: '#282828'
-                    }}>{this._overviewData.moodSwing && this._overviewData.moodSwing.toUpperCase()}</Text>
-                  </View>
-                  <View style={{
-                    width: '50%'
-                  }}>
-                    <Text style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      color: '#282828'
-                    }}>AVG ACTIVITY</Text>
-                    <Text style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      paddingBottom: 8,
-                      color: '#282828'
-                    }}><Text style={{
-                      fontSize: 18,
-                      fontFamily: 'Inter-SemiBold',
-                      color: '#282828'
-                    }}>{this._overviewData.avgActivity}</Text>/day</Text>
-                  </View>
-                  <View style={{
-                    width: '50%'
-                  }}>
-                    <Text style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      color: '#282828'
-                    }}>AVG RELATION</Text>
-                    <Text style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      paddingBottom: 8,
-                      color: '#282828'
-                    }}><Text style={{
-                      fontSize: 18,
-                      fontFamily: 'Inter-SemiBold',
-                      color: '#282828'
-                    }}>{this._overviewData.avgRelation}</Text>/day</Text>
-                  </View>
-                </View>
-                <View style={{
-                  marginVertical: 8,
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#EEEEEE'
-                }}></View>
-                <View style={{
-                  paddingHorizontal: 16,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                  <View>
-                    <Text style={{
-                      fontSize: 18,
-                      fontFamily: 'Inter-SemiBold',
-                      paddingVertical: 8,
-                      color: '#282828'
-                    }}>MOOD ANALYSIS</Text>
-                  </View>
-                  <View>
-                    <Text style={{
-                      fontSize: 18,
-                      fontFamily: 'Inter-SemiBold',
-                      paddingVertical: 8,
-                      color: '#282828'
-                    }}>{this._choosenMoodAnalyze && this._choosenMoodAnalyze.toUpperCase()}</Text>
-                  </View>
-                </View>
-                <View style={{
-                  paddingHorizontal: 16
-                }}>
+                <TouchableOpacity
+                  onPress={this._moodPicker}
+                >
                   <Text style={{
-                    fontSize: 12,
-                    fontFamily: 'Inter-Regular',
-                    color: '#282828',
-                    paddingVertical: 8
-                  }}>ACTIVITIES</Text>
-                  {
-                    this._choosenMoodAnalysis.activityCount && this._choosenMoodAnalysis.activityCount.map(activity => {
-                      return (
-                        <View style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          marginBottom: 8
-                        }} key={activity.id}>
-                          <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                          }}>
-                            <Icon style={{
-                              marginRight: 8
-                            }} size={20} name={activity.icon} />
-                            <Text style={{
-                              fontSize: 16,
-                              fontFamily: 'Inter-Regular'
-                            }}>{activity.name}</Text>
-                          </View>
-                          <View>
-                          <Text style={{
-                            fontSize: 16,
-                            fontFamily: 'Inter-SemiBold'
-                          }}>{Math.round((activity.count/this._choosenMoodAnalysis.activityTotal) * 100)}%</Text>
-                          </View>
-                        </View>
-                      )
-                    })
-                  }
-                  <Text style={{
-                    fontSize: 12,
-                    fontFamily: 'Inter-Regular',
-                    color: '#282828',
+                    fontSize: 18,
+                    fontFamily: 'Inter-SemiBold',
                     paddingVertical: 8,
-                  }}>RELATIONS</Text>
-                  {
-                    this._choosenMoodAnalysis.relationCount && this._choosenMoodAnalysis.relationCount.map(relation => {
-                      return (
+                    color: '#282828'
+                  }}>{this._choosenMoodAnalyze && this._choosenMoodAnalyze.toUpperCase()}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{
+                paddingHorizontal: 16
+              }}>
+                <Text style={{
+                  fontSize: 12,
+                  fontFamily: 'Inter-Regular',
+                  color: '#777777',
+                  paddingVertical: 8
+                }}>Activity</Text>
+                {
+                  this._choosenMoodAnalysis.activityCount && this._choosenMoodAnalysis.activityCount.map(activity => {
+                    return (
+                      <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginBottom: 12
+                      }} key={activity.id}>
                         <View style={{
                           flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          marginBottom: 8
-                        }} key={relation.id}>
-                          <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                          }}>
-                            <Icon style={{
-                              marginRight: 8
-                            }} size={20} name={relation.icon} />
-                            <Text style={{
-                              fontSize: 16,
-                              fontFamily: 'Inter-Regular'
-                            }}>{relation.name}</Text>
-                          </View>
-                          <View>
+                          alignItems: 'center'
+                        }}>
+                          <Icon style={{
+                            marginRight: 8
+                          }} size={20} name={activity.icon} color={`#282828`} />
                           <Text style={{
+                            fontFamily: 'Inter-Regular',
                             fontSize: 16,
-                            fontFamily: 'Inter-SemiBold'
-                          }}>{Math.round((relation.count/this._choosenMoodAnalysis.relationTotal) * 100)}%</Text>
-                          </View>
+                            color: `#282828`,
+                            letterSpacing: -0.3
+                          }}>{activity.name}</Text>
                         </View>
-                      )
-                    })
-                  }
-                </View>
+                        <View>
+                        <Text style={{
+                          fontFamily: 'Inter-Regular',
+                          fontSize: 16,
+                          color: `#282828`,
+                          letterSpacing: -0.3
+                        }}>{Math.round((activity.count/this._choosenMoodAnalysis.activityTotal) * 100)}%</Text>
+                        </View>
+                      </View>
+                    )
+                  })
+                }
+                <Text style={{
+                  fontSize: 12,
+                  fontFamily: 'Inter-Regular',
+                  color: '#777777',
+                  paddingVertical: 8,
+                }}>Relation</Text>
+                {
+                  this._choosenMoodAnalysis.relationCount && this._choosenMoodAnalysis.relationCount.map(relation => {
+                    return (
+                      <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginBottom: 8
+                      }} key={relation.id}>
+                        <View style={{
+                          flexDirection: 'row',
+                          alignItems: 'center'
+                        }}>
+                          <Icon style={{
+                            marginRight: 8
+                          }} size={20} name={relation.icon} color={`#282828`} />
+                          <Text style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 16,
+                            color: `#282828`,
+                            letterSpacing: -0.3
+                          }}>{relation.name}</Text>
+                        </View>
+                        <View>
+                        <Text style={{
+                          fontFamily: 'Inter-Regular',
+                          fontSize: 16,
+                          color: `#282828`,
+                          letterSpacing: -0.3
+                        }}>{Math.round((relation.count/this._choosenMoodAnalysis.relationTotal) * 100)}%</Text>
+                        </View>
+                      </View>
+                    )
+                  })
+                }
               </View>
-            ) : (
+            </ScrollView>
+          ) : (
+            <View style={{
+              flex: 1
+            }}>
               <View style={{
                 flex: 1,
                 alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              </View>
+              <View style={{
+                flex: 6,
+                alignItems: 'center',
+                justifyContent: 'center',
                 padding: 16
               }}>
                 <Image style={{
@@ -447,6 +501,12 @@ class AnalyticsScreen extends Component {
                 }} source={{
                   uri: rootStore.asset.image.confuseLog
                 }} />
+              </View>
+              <View style={{
+                flex: 6,
+                alignItems: 'center',
+                paddingHorizontal: 16
+              }}>
                 <Text style={{
                   fontFamily: 'Inter-SemiBold',
                   fontSize: 24,
@@ -461,10 +521,10 @@ class AnalyticsScreen extends Component {
                   letterSpacing: -0.3
                 }}>Add more mood to analyze your emotional state and things that affect your mood</Text>
               </View>
-            )
-          }
-        </View>
-			</ScrollView>
+            </View>
+          )
+        }
+			</React.Fragment>
 		)
 	}
 }

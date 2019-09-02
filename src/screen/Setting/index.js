@@ -32,9 +32,9 @@ export class SettingScreen extends Component {
         }}>
           <Text style={{
             fontFamily: "Inter-Bold",
-            fontSize: 18,
+            fontSize: 24,
             letterSpacing: -0.3
-          }}>SETTING</Text>
+          }}>Setting</Text>
         </View>
       )
     }

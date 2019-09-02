@@ -106,6 +106,7 @@ class AddLog extends Component {
 
   render() {
     const currentDate = new Date(Date.parse(this._key))
+    console.log(this._key)
     const companionUri = logStore.inputLog.mood.name && rootStore.companion.cat[logStore.inputLog.mood.name.toLowerCase()]
 
     return (
