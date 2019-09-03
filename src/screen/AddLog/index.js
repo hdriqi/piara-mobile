@@ -105,7 +105,8 @@ class AddLog extends Component {
   }
 
   render() {
-    const currentDate = new Date(Date.parse(this._key))
+    const [year, month, date] = this._key.split('-')
+    const currentDate = new Date(Date.parse(`${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`))
     console.log(this._key)
     const companionUri = logStore.inputLog.mood.name && rootStore.companion.cat[logStore.inputLog.mood.name.toLowerCase()]
 

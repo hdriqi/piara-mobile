@@ -50,13 +50,14 @@ export class SettingScreen extends Component {
 		if(currentTime.getHours() >= selectedHour && currentTime.getMinutes() > selectedMinute) {
 			currentDate++
 		}
-		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate.toString().padStart(2, '0')}T${selectedHour}:${selectedMinute}:00`
-		console.log(scheduleTime)
+		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate.toString().padStart(2, '0')}T${selectedHour}:${selectedMinute}:00Z`
+		const parsedTime = new Date(Date.parse(scheduleTime) + new Date().getTimezoneOffset() * 60000)
+		console.log(parsedTime)
 		PushNotification.cancelAllLocalNotifications()
 		PushNotification.localNotificationSchedule({
 			title: "How's Your Day?", // (optional)
 			message: "Fill your daily mood to understand yourself and reflect your emotional state", // (required)
-			date: new Date(Date.parse(scheduleTime)),
+			date: parsedTime,
 			repeatType: 'day',
 			playSound: true,
 			soundName: 'default',
