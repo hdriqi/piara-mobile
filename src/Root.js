@@ -22,7 +22,7 @@ import { observer } from "mobx-react";
 
 const createSession = async () => {
   config = {
-    appDomain: "https://flamboyant-darwin-d11c17.netlify.com",
+    appDomain: "https://auth.piara.me",
     scopes: ["store_write"],
     redirectUrl: "/redirect.html"
   }
@@ -128,10 +128,8 @@ class SignInScreen extends Component {
     var app = this
 
     const prevRoute = this.props.navigation.getParam('prevRoute')
-    console.log(prevRoute)
 
     Linking.getInitialURL().then(async (url) => {
-      console.log(this._dummyDeepLinkedUrl)
       if (url && prevRoute !== 'logOut' && !this._isLoading) {
         this._isLoading = true
         var query = url.split(":")
@@ -141,7 +139,7 @@ class SignInScreen extends Component {
             const result = await RNBlockstackSdk.handlePendingSignIn(parts[1])
             this._isLoading = false
             await AsyncStorage.setItem('authToken', result.authResponseToken)
-            console.log('hmm')
+            await AsyncStorage.setItem('decentralizedId', result.decentralizedID)
             app.props.navigation.navigate('App')
           }
         }
@@ -187,7 +185,7 @@ class SignInScreen extends Component {
             fontFamily: 'Inter-SemiBold',
             color: '#7DABC9',
             letterSpacing: -0.3,
-            opacity: this._isLoading ? 1 : 0.3
+            opacity: this._isLoading ? 0.3 : 1
           }}>Sign in with Blockstack -></Text>
         </TouchableOpacity>
       </View>

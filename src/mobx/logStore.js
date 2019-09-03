@@ -31,7 +31,8 @@ class LogStore {
 
   @action
 	async fetchInitialLog() {
-    const currentList = await AsyncStorage.getItem('my-log')
+    const dId = await AsyncStorage.getItem('decentralizedId')
+    const currentList = await AsyncStorage.getItem(`${dId}-log`)
     try {
       const parsedCurrentList = JSON.parse(currentList)
       if(Array.isArray(parsedCurrentList)) {
@@ -69,19 +70,22 @@ class LogStore {
       })
     }
     
-    await AsyncStorage.setItem(`my-log`, JSON.stringify(this.list))
+    const dId = await AsyncStorage.getItem('decentralizedId')
+    await AsyncStorage.setItem(`${dId}-log`, JSON.stringify(this.list))
   }
 
   @action
   async backupList() {
-    await RNBlockstackSdk.putFile('my-log', JSON.stringify(this.list), {
+    const dId = await AsyncStorage.getItem('decentralizedId')
+    await RNBlockstackSdk.putFile(`${dId}-log`, JSON.stringify(this.list), {
       encrypt: true
     })
   }
 
   @action
   async restoreList() {
-    await RNBlockstackSdk.getFile('my-log', {
+    const dId = await AsyncStorage.getItem('decentralizedId')
+    await RNBlockstackSdk.getFile(`${dId}-log`, {
       decrypt: true
     })
   }

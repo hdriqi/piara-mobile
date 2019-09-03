@@ -98,6 +98,7 @@ class RootStore {
 	@action
 	async logOut() {
 		await AsyncStorage.setItem('authToken', JSON.stringify(null))
+		await AsyncStorage.setItem('dId', JSON.stringify(null))
 
 		return true
 	}

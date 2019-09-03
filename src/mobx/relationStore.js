@@ -17,7 +17,8 @@ class RelationStore {
 
 	@action
 	async fetchInitialRelation() {
-		const currentList = await AsyncStorage.getItem('my-relation')
+		const dId = await AsyncStorage.getItem('decentralizedId')
+		const currentList = await AsyncStorage.getItem(`${dId}-relation`)
 		const parsedCurrentList = JSON.parse(currentList)
 		if(Array.isArray(parsedCurrentList) && parsedCurrentList.length > 0) {
 			this.list = parsedCurrentList
@@ -40,19 +41,22 @@ class RelationStore {
 			name,
 			icon
 		})
-		await AsyncStorage.setItem('my-relation', JSON.stringify(this.list))
+		const dId = await AsyncStorage.getItem('decentralizedId')
+		await AsyncStorage.setItem(`${dId}-relation`, JSON.stringify(this.list))
 	}
 
 	@action
   async backupList() {
-    await RNBlockstackSdk.putFile('my-relation', JSON.stringify(this.list), {
+		const dId = await AsyncStorage.getItem('decentralizedId')
+    await RNBlockstackSdk.putFile(`${dId}-relation`, JSON.stringify(this.list), {
       encrypt: true
     })
 	}
 	
 	@action
   async restoreList() {
-    await RNBlockstackSdk.getFile('my-relation', {
+		const dId = await AsyncStorage.getItem('decentralizedId')
+    await RNBlockstackSdk.getFile(`${dId}-relation`, {
       decrypt: true
     })
   }

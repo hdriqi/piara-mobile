@@ -17,7 +17,8 @@ class ActivityStore {
 
 	@action
 	async fetchInitialActivity() {
-		const currentList = await AsyncStorage.getItem('my-activity')
+		const dId = await AsyncStorage.getItem('decentralizedId')
+		const currentList = await AsyncStorage.getItem(`${dId}-activity`)
 		const parsedCurrentList = JSON.parse(currentList)
 		if(Array.isArray(parsedCurrentList) && parsedCurrentList.length > 0) {
 			this.list = parsedCurrentList
@@ -40,19 +41,22 @@ class ActivityStore {
 			name,
 			icon
 		})
-		await AsyncStorage.setItem('my-activity', JSON.stringify(this.list))
+		const dId = await AsyncStorage.getItem('decentralizedId')
+		await AsyncStorage.setItem(`${dId}-activity`, JSON.stringify(this.list))
 	}
 
 	@action
   async backupList() {
-    await RNBlockstackSdk.putFile('my-activity', JSON.stringify(this.list), {
+		const dId = await AsyncStorage.getItem('decentralizedId')
+    await RNBlockstackSdk.putFile(`${dId}-activity`, JSON.stringify(this.list), {
       encrypt: true
     })
 	}
 	
 	@action
   async restoreList() {
-    await RNBlockstackSdk.getFile('my-activity', {
+		const dId = await AsyncStorage.getItem('decentralizedId')
+    await RNBlockstackSdk.getFile(`${dId}-activity`, {
       decrypt: true
     })
   }

@@ -50,7 +50,8 @@ export class SettingScreen extends Component {
 		if(currentTime.getHours() >= selectedHour && currentTime.getMinutes() > selectedMinute) {
 			currentDate++
 		}
-		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate}T${selectedHour}:${selectedMinute}:00`
+		const scheduleTime = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${currentDate.toString().padStart(2, '0')}T${selectedHour}:${selectedMinute}:00`
+		console.log(scheduleTime)
 		PushNotification.cancelAllLocalNotifications()
 		PushNotification.localNotificationSchedule({
 			title: "How's Your Day?", // (optional)
@@ -311,39 +312,6 @@ export class SettingScreen extends Component {
 								<Switch value={this._switchState} onValueChange={this.switchOnPress} />
 							</View>
 						</View> */}
-					</View>
-				</View>
-				<View style={{
-					paddingVertical: 16,
-					borderBottomWidth: 1,
-					borderBottomColor: '#EEEEEE'
-				}}>
-					<View style={{
-						paddingHorizontal: 16
-					}}>
-						<Text style={{
-							fontSize: 16,
-							fontFamily: 'Inter-SemiBold',
-							paddingBottom: 8,
-							color: '#3C3C3C',
-							letterSpacing: -0.3
-						}}>About</Text>
-						<View style={{
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-						}}>
-							<View style={{
-								paddingBottom: 8
-							}}>
-								<Text style={{
-									fontFamily: 'Inter-Regular',
-									fontSize: 16,
-									color: `#777777`,
-									letterSpacing: -0.3
-								}}>Our Story</Text>
-							</View>
-						</View>
 					</View>
 				</View>
 				<View style={{
