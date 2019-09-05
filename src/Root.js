@@ -36,6 +36,20 @@ const createSession = async () => {
   }
 }
 
+class OnboardingScreen extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Onboarding</Text>
+      </View>
+    )
+  }
+}
+
 class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props)
@@ -86,18 +100,13 @@ class AuthLoadingScreen extends Component {
       requestPermissions: true
     })
 
-    // PushNotification.localNotificationSchedule({
-    //   /* iOS and Android properties */
-    //   title: "Cariin titel yang bagus", // (optional)
-    //   message: "Cariin tulisan yang bagus untuk isi", // (required)
-    //   date: new Date(`2019-08-19T20:01:00`),
-    //   repeatType: 'day',
-    //   playSound: true, // (optional) default: true
-    //   soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-    // })
+    // check if onboarding
+    // const onboardingStatus = rootStore.userSetting.onboarding
+    // if(onboardingStatus) {
+    //   this.props.navigation.navigate('Onboarding')
+    // }
 
     const signedIn = await AsyncStorage.getItem('authToken')
-    console.log(signedIn)
     try {
       const parsedData = JSON.parse(signedIn) 
       this.props.navigation.navigate(parsedData ? 'App' : 'Auth')
@@ -137,9 +146,10 @@ class SignInScreen extends Component {
           var parts = query[1].split("=")
           if (parts.length > 1) {
             const result = await RNBlockstackSdk.handlePendingSignIn(parts[1])
-            this._isLoading = false
             await AsyncStorage.setItem('authToken', result.authResponseToken)
             await AsyncStorage.setItem('decentralizedId', result.decentralizedID)
+            await rootStore.restoreData()
+            this._isLoading = false
             app.props.navigation.navigate('App')
           }
         }
@@ -248,6 +258,7 @@ const AppRouter = createAppContainer(createSwitchNavigator(
     AuthLoading: AuthLoadingScreen,
     App: AppStack,
     Auth: AuthStack,
+    Auth: OnboardingScreen,
   },
   {
     initialRouteName: 'AuthLoading',

@@ -50,7 +50,7 @@ class ActivityStore {
 		const dId = await AsyncStorage.getItem('decentralizedId')
     await RNBlockstackSdk.putFile(`${dId}-activity`, JSON.stringify(this.list), {
       encrypt: true
-    })
+		})
 	}
 	
 	@action

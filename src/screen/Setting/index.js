@@ -21,6 +21,7 @@ export class SettingScreen extends Component {
 		super(prop)
 		this.switchOnPress = this.switchOnPress.bind(this)
 		this._switchReminderOnPress = this._switchReminderOnPress.bind(this)
+		this._showTimePicker = this._showTimePicker.bind(this)
 		this._init = this._init.bind(this)
 		this._pickerData = [Array.from(Array(24), (e,i)=>(i+1).toString().padStart(2, '0')), Array.from(Array(60), (e,i)=>i.toString().padStart(2, '0'))]
 	}
@@ -66,29 +67,6 @@ export class SettingScreen extends Component {
 
 	async _init() {
 		this._switchState = rootStore.userSetting.pin && rootStore.userSetting.pin.length > 0 ? true : false
-		Picker.init({
-			isLoop: true,
-			pickerData: this._pickerData,
-			pickerTitleText: "Select Time",
-			pickerFontFamily: 'Inter-SemiBold',
-			selectedValue: [rootStore.userSetting.reminderTime.hour, rootStore.userSetting.reminderTime.minute],
-			pickerTextEllipsisLen: 12,
-			pickerConfirmBtnText: 'Confirm',
-			pickerCancelBtnText: 'Cancel',
-			onPickerConfirm: async (data) => {
-				const selectedHour = data[0]
-				const selectedMinute = data[1].toString().padStart(2, '0')
-
-				await rootStore.setReminderTime({
-					hour: selectedHour,
-					minute: selectedMinute
-				})
-
-				if(this._switchReminder) {
-					this._scheduleReminder(selectedHour, selectedMinute)
-				}
-			}
-		})
 	}
 
 	async _switchReminderOnPress(val) {
@@ -157,7 +135,33 @@ export class SettingScreen extends Component {
 			],
 			{cancelable: false},
 		)
-		
+	}
+
+	async _showTimePicker() {
+		Picker.init({
+			isLoop: true,
+			pickerData: this._pickerData,
+			pickerTitleText: "Select Time",
+			pickerFontFamily: 'Inter-SemiBold',
+			selectedValue: [rootStore.userSetting.reminderTime.hour, rootStore.userSetting.reminderTime.minute],
+			pickerTextEllipsisLen: 12,
+			pickerConfirmBtnText: 'Confirm',
+			pickerCancelBtnText: 'Cancel',
+			onPickerConfirm: async (data) => {
+				const selectedHour = data[0]
+				const selectedMinute = data[1].toString().padStart(2, '0')
+
+				await rootStore.setReminderTime({
+					hour: selectedHour,
+					minute: selectedMinute
+				})
+
+				if(this._switchReminder) {
+					this._scheduleReminder(selectedHour, selectedMinute)
+				}
+			}
+		})
+		Picker.show()
 	}
 
 	render() {
@@ -231,7 +235,7 @@ export class SettingScreen extends Component {
 								}}>Time</Text>
 							</View>
 							<TouchableOpacity
-								onPress={() => Picker.show()}
+								onPress={() => this._showTimePicker()}
 							>
 								<Text style={{
 									fontFamily: 'Inter-Regular',
