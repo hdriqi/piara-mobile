@@ -67,6 +67,7 @@ export class SettingScreen extends Component {
 
 	async _init() {
 		this._switchState = rootStore.userSetting.pin && rootStore.userSetting.pin.length > 0 ? true : false
+		this._switchReminder = rootStore.userSetting.reminder
 	}
 
 	async _switchReminderOnPress(val) {

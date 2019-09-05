@@ -258,7 +258,7 @@ const AppRouter = createAppContainer(createSwitchNavigator(
     AuthLoading: AuthLoadingScreen,
     App: AppStack,
     Auth: AuthStack,
-    Auth: OnboardingScreen,
+    Onboarding: OnboardingScreen,
   },
   {
     initialRouteName: 'AuthLoading',
