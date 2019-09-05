@@ -59,7 +59,7 @@ class ActivityStore {
     const restoredList = await RNBlockstackSdk.getFile(`${dId}-activity`, {
       decrypt: true
 		})
-		this.list = restoredList
+		this.list = JSON.parse(restoredList.fileContents)
   }
 
 	remove(id) {

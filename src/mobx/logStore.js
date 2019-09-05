@@ -88,7 +88,7 @@ class LogStore {
     const restoredList = await RNBlockstackSdk.getFile(`${dId}-log`, {
       decrypt: true
     })
-    this.list = restoredList
+    this.list = JSON.parse(restoredList.fileContents)
   }
 
   setActiveLog(key) {

@@ -59,7 +59,7 @@ class RelationStore {
     const restoredList = await RNBlockstackSdk.getFile(`${dId}-relation`, {
       decrypt: true
 		})
-		this.list = restoredList
+		this.list = JSON.parse(restoredList.fileContents)
   }
 
 	remove(id) {
