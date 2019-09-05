@@ -146,6 +146,7 @@ class SignInScreen extends Component {
           var parts = query[1].split("=")
           if (parts.length > 1) {
             const result = await RNBlockstackSdk.handlePendingSignIn(parts[1])
+            console.log(result.decentralizedID)
             await AsyncStorage.setItem('authToken', result.authResponseToken)
             await AsyncStorage.setItem('decentralizedId', result.decentralizedID)
             await rootStore.restoreData()

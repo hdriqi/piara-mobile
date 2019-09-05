@@ -85,9 +85,10 @@ class LogStore {
   @action
   async restoreList() {
     const dId = await AsyncStorage.getItem('decentralizedId')
-    await RNBlockstackSdk.getFile(`${dId}-log`, {
+    const restoredList = await RNBlockstackSdk.getFile(`${dId}-log`, {
       decrypt: true
     })
+    this.list = restoredList
   }
 
   setActiveLog(key) {

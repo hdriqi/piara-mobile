@@ -56,9 +56,10 @@ class RelationStore {
 	@action
   async restoreList() {
 		const dId = await AsyncStorage.getItem('decentralizedId')
-    await RNBlockstackSdk.getFile(`${dId}-relation`, {
+    const restoredList = await RNBlockstackSdk.getFile(`${dId}-relation`, {
       decrypt: true
-    })
+		})
+		this.list = restoredList
   }
 
 	remove(id) {

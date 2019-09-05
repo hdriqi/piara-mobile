@@ -56,9 +56,10 @@ class ActivityStore {
 	@action
   async restoreList() {
 		const dId = await AsyncStorage.getItem('decentralizedId')
-    await RNBlockstackSdk.getFile(`${dId}-activity`, {
+    const restoredList = await RNBlockstackSdk.getFile(`${dId}-activity`, {
       decrypt: true
-    })
+		})
+		this.list = restoredList
   }
 
 	remove(id) {
