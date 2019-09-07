@@ -48,7 +48,11 @@ export class Swiper extends Component {
     this.setState({
       prevActiveIndex: index
     })
-    setTimeout(() => this._swiper.scrollTo({ x: offsetX, y: 0, animated: animated }), 250)
+    setTimeout(() => {
+      if(this._swiper) {
+        this._swiper.scrollTo({ x: offsetX, y: 0, animated: animated })
+      }
+    }, 250)
   }
 
   async _handleScroll(event) {

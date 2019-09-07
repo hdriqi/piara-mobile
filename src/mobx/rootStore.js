@@ -111,6 +111,12 @@ class RootStore {
 	}
 
 	@action
+	async setOnboarding(val) {
+		this.userSetting.onboarding = val
+		await AsyncStorage.setItem('userSetting', JSON.stringify(toJS(this.userSetting)))
+	}
+
+	@action
 	async setReminder(val) {
 		this.userSetting.reminder = val
 		await AsyncStorage.setItem('userSetting', JSON.stringify(toJS(this.userSetting)))

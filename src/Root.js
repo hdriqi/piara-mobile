@@ -11,6 +11,7 @@ import HomeScreen from './screen/Home'
 import AddLogNavigator from './screen/AddLog'
 import AnalyticsNavigator from './screen/Analytics'
 import SettingNavigator from './screen/Setting'
+import OnboardingScreen from './screen/Onboarding'
 
 import { TouchableWithoutFeedback, TouchableOpacity } from "react-native-gesture-handler"
 import rootStore from "./mobx/rootStore"
@@ -18,7 +19,7 @@ import activityStore from './mobx/activityStore'
 import logStore from "./mobx/logStore"
 import relationStore from "./mobx/relationStore"
 import { observable } from "mobx";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react"
 
 const createSession = async () => {
   config = {
@@ -33,20 +34,6 @@ const createSession = async () => {
     console.log("created " + result["loaded"])
   } else {
     console.log("reusing session")
-  }
-}
-
-class OnboardingScreen extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Onboarding</Text>
-      </View>
-    )
   }
 }
 
@@ -101,10 +88,10 @@ class AuthLoadingScreen extends Component {
     })
 
     // check if onboarding
-    // const onboardingStatus = rootStore.userSetting.onboarding
-    // if(onboardingStatus) {
-    //   this.props.navigation.navigate('Onboarding')
-    // }
+    const onboardingStatus = rootStore.userSetting.onboarding
+    if(onboardingStatus) {
+      return this.props.navigation.navigate('Onboarding')
+    }
 
     const signedIn = await AsyncStorage.getItem('authToken')
     try {
@@ -191,13 +178,25 @@ class SignInScreen extends Component {
         <TouchableOpacity
           onPress={() => this.signIn()}
         >
-          <Text style={{
-            fontSize: 24,
-            fontFamily: 'Inter-SemiBold',
-            color: '#7DABC9',
-            letterSpacing: -0.3,
-            opacity: this._isLoading ? 0.3 : 1
-          }}>Sign in with Blockstack -></Text>
+          {
+            this._isLoading ? (
+              <Text style={{
+                fontSize: 24,
+                fontFamily: 'Inter-SemiBold',
+                color: '#7DABC9',
+                letterSpacing: -0.3,
+                opacity: 0.3
+              }}>Signing in...</Text>
+            ) : (
+              <Text style={{
+                fontSize: 24,
+                fontFamily: 'Inter-SemiBold',
+                color: '#7DABC9',
+                letterSpacing: -0.3,
+                opacity: 1
+              }}>Sign in with Blockstack -></Text>
+            )
+          }
         </TouchableOpacity>
       </View>
     )
